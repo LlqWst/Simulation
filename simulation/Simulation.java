@@ -4,10 +4,10 @@ package simulation;
 import simulation.entity.Entity;
 import simulation.entity.creature.Creature;
 import simulation.entity.creature.Herbivore;
+import simulation.entity.creature.Predator;
+import simulation.entity.staticObjects.Grass;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.*;
 
 public class Simulation {
 
@@ -15,28 +15,33 @@ public class Simulation {
     MapRenderer renderer = new MapRenderer(map);
 
     public void turn (Map map) {
-//        HashMap<Coordinates, Entity> temp = new HashMap<>();
-//        for (HashMap.Entry<Coordinates, Entity> entity : map.getAllEntities().entrySet()) {
-//            if (entity.getValue() instanceof Herbivore) {
-//                Coordinates coordinates = ((Herbivore) entity.getValue()).makeMove(entity.getKey(), map);
-//                temp.put(coordinates, new Herbivore());
-//            }
-//            else if (!temp.containsKey(entity.getKey())){
-//                temp.put(entity.getKey(), entity.getValue());
-//            }
-//        }
-//        map.getAllEntities().clear();
-//        map.getAllEntities().putAll(temp);
+
+        if(!map.getAllEntities().containsValue(new Grass())){
+            map.setEntities(map.getRandomEmptyCoordinates(), new Grass());
+            map.setEntities(map.getRandomEmptyCoordinates(), new Grass());
+        }
+
+        if(!map.getAllEntities().containsValue(new Herbivore())){
+            map.setEntities(map.getRandomEmptyCoordinates(), new Herbivore());
+            map.setEntities(map.getRandomEmptyCoordinates(), new Herbivore());
+            map.setEntities(map.getRandomEmptyCoordinates(), new Herbivore());
+        }
 
         HashMap<Coordinates, Entity> temp = new HashMap<>(map.getAllEntities());
-        Iterator<HashMap.Entry<Coordinates, Entity>> iterator = temp.entrySet().iterator();
-        while (iterator.hasNext()){
-            HashMap.Entry<Coordinates, Entity> entity = iterator.next();
-            if(entity.getValue() instanceof Herbivore){
+        List<Coordinates> arr = new ArrayList<>();
+        for (HashMap.Entry<Coordinates, Entity> entity : temp.entrySet()) {
+            if (entity.getValue() instanceof Herbivore) {
                 Coordinates coordinates = ((Herbivore) entity.getValue()).makeMove(entity.getKey(), map);
                 map.getAllEntities().remove(entity.getKey());
                 map.setEntities(coordinates, new Herbivore());
-                //((Herbivore) map.getEntities(coordinates)).changeStatus();
+            } else if (entity.getValue() instanceof Predator && !arr.contains(entity.getKey())) {
+                Coordinates coordinates = ((Predator) entity.getValue()).makeMove(entity.getKey(), map);
+                if(temp.containsKey(coordinates)){
+                    temp.put(coordinates, new Predator());
+                    arr.add(coordinates);
+                }
+                map.getAllEntities().remove(entity.getKey());
+                map.setEntities(coordinates, new Predator());
             }
         }
 

@@ -3,9 +3,6 @@ package simulation.entity.creature;
 import simulation.Coordinates;
 import simulation.Map;
 import simulation.entity.*;
-import simulation.entity.staticObjects.Grass;
-import simulation.entity.staticObjects.Rock;
-import simulation.entity.staticObjects.Tree;
 
 import java.util.*;
 

@@ -7,11 +7,7 @@ import simulation.entity.staticObjects.Grass;
 
 public class Herbivore extends Creature {
 
-    private boolean movedStatus;
 
-    public Herbivore() {
-        super();
-    }
 
     protected static final Entity aim = new Grass();
     @Override

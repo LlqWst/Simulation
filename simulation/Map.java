@@ -7,7 +7,10 @@ import simulation.entity.staticObjects.Grass;
 import simulation.entity.staticObjects.Rock;
 import simulation.entity.staticObjects.Tree;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 
 public class Map {
 
@@ -17,6 +20,8 @@ public class Map {
 
 
     public Map() {
+        entities.put(new Coordinates(4, 5), new Herbivore());
+        entities.put(new Coordinates(7, 0), new Predator());
         entities.put(new Coordinates(5, 9), new Grass());
         entities.put(new Coordinates(0, 5), new Herbivore());
         entities.put(new Coordinates(9, 4), new Herbivore());
@@ -33,15 +38,20 @@ public class Map {
         entities.put(new Coordinates(0, 3), new Tree());
         entities.put(new Coordinates(1, 1), new Herbivore());
         entities.put(new Coordinates(7, 7), new Herbivore());
+        entities.put(new Coordinates(3, 9), new Rock());
         entities.put(new Coordinates(0, 1), new Herbivore());
         entities.put(new Coordinates(1, 5), new Tree());
         entities.put(new Coordinates(1, 5), new Tree());
         entities.put(new Coordinates(1, 6), new Tree());
         entities.put(new Coordinates(1, 7), new Tree());
+        entities.put(new Coordinates(6, 5), new Tree());
+        entities.put(new Coordinates(7, 5), new Tree());
+        entities.put(new Coordinates(7, 4), new Rock());
         entities.put(new Coordinates(0, 9), new Grass());
         entities.put(new Coordinates(0, 0), new Grass());
         entities.put(new Coordinates(3, 4), new Rock());
-        entities.put(new Coordinates(3, 6), new Rock());
+        entities.put(new Coordinates(5, 6), new Rock());
+        entities.put(new Coordinates(3, 0), new Rock());
         entities.put(new Coordinates(2, 5), new Predator());
     }
 
@@ -69,6 +79,22 @@ public class Map {
 
     public HashMap<Coordinates, Entity> getAllEntities() {
         return entities;
+    }
+
+    public Coordinates getRandomEmptyCoordinates(){
+        List<Coordinates> allEmptyCoordinates = new ArrayList<>();
+        for (int row = 0; row < getMaxRow(); row++) {
+            for (int column = 0; column < getMaxColumn(); column++) {
+                Coordinates coordinates = new Coordinates (row, column);
+                if (isEmpty(coordinates)){
+                    allEmptyCoordinates.add(coordinates);
+                }
+            }
+        }
+
+        Random random = new Random();
+        int randomCoordinates = random.nextInt(allEmptyCoordinates.size());
+        return allEmptyCoordinates.get(randomCoordinates);
     }
 
 }

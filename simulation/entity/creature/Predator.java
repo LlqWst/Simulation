@@ -8,7 +8,7 @@ public class Predator extends Creature {
 
     protected static final Entity aim = new Herbivore();
     @Override
-    public Coordinates makeMove(Coordinates coordinates, Map map) {
-        return null;
+    public Coordinates makeMove(Coordinates coordinates, Map map){
+        return new FindPath(coordinates, map, aim).findPath();
     }
 }
