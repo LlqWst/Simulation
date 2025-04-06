@@ -4,6 +4,13 @@ public class MapRenderer {
 
     private static final String ANSI_BLACK_BACKGROUND = "\u001B[0;100m";
     private static final String ANSI_COLOR_RESET = "\u001B[0m";
+    private static final String EMOJI_HERBIVORE = "\uD83D\uDC07";
+    private static final String EMOJI_PREDATOR = "\uD83E\uDD8A";
+    private static final String EMOJI_GRASS = "\uD83C\uDF40";
+    private static final String EMOJI_TREE = "\uD83E\uDD66";
+    private static final String EMOJI_ROCK = "⛰️";
+    private static final String EMOJI_EARTH = "\uD83D\uDFEB";
+
     private final Map map;
 
     public MapRenderer(Map map) {
@@ -25,16 +32,16 @@ public class MapRenderer {
     public String entitySprite(Coordinates coordinates){
 
         if(map.isEmpty(coordinates)){
-            return "_";
+            return EMOJI_EARTH;
         }
 
         return switch (map.getEntities(coordinates).getClass().getSimpleName()) {
-            case "Herbivore" -> "H";
-            case "Grass" -> "G";
-            case "Tree" -> "T";
-            case "Rock" -> "R";
-           // case "Predator" -> "\uD83D\uDC7A";
-            default -> "";
+            case "Herbivore" -> EMOJI_HERBIVORE;
+            case "Predator" -> EMOJI_PREDATOR;
+            case "Grass" -> EMOJI_GRASS;
+            case "Tree" -> EMOJI_TREE;
+            case "Rock" -> EMOJI_ROCK;
+            default -> EMOJI_ROCK;
         };
     }
 
