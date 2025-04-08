@@ -21,10 +21,9 @@ public class Map {
 
     public Map() {
         entities.put(new Coordinates(4, 5), new Herbivore());
-        entities.put(new Coordinates(7, 0), new Predator());
-        entities.put(new Coordinates(5, 9), new Grass());
-        entities.put(new Coordinates(0, 5), new Herbivore());
-        entities.put(new Coordinates(9, 4), new Herbivore());
+        entities.put(new Coordinates(4, 7), new Predator());
+        entities.put(new Coordinates(5, 5), new Predator());
+        entities.put(new Coordinates(4, 6), new Grass());
         entities.put(new Coordinates(8, 8), new Grass());
         entities.put(new Coordinates(5, 8), new Grass());
         entities.put(new Coordinates(5, 4), new Grass());
@@ -36,10 +35,8 @@ public class Map {
         entities.put(new Coordinates(1, 4), new Tree());
         entities.put(new Coordinates(1, 3), new Tree());
         entities.put(new Coordinates(0, 3), new Tree());
-        entities.put(new Coordinates(1, 1), new Herbivore());
-        entities.put(new Coordinates(7, 7), new Herbivore());
         entities.put(new Coordinates(3, 9), new Rock());
-        entities.put(new Coordinates(0, 1), new Herbivore());
+        entities.put(new Coordinates(7, 8), new Herbivore());
         entities.put(new Coordinates(1, 5), new Tree());
         entities.put(new Coordinates(1, 5), new Tree());
         entities.put(new Coordinates(1, 6), new Tree());

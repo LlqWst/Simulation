@@ -22,22 +22,22 @@ public class FindPath {
         visitedCoordinates.put(coordinates, new ParentsDistanceForCoordinates(0, coordinates));
     }
 
-    public Coordinates findPath(){
+    public List<Coordinates> findPath(){
 
         int distance = 0;
         Coordinates currentCell;
 
         if(!map.getAllEntities().containsValue(aim)){
-            return startCoordinates;
+            return Collections.singletonList(startCoordinates);
         }
 
         do  {
             currentCell = coordinatesForVisited.poll();
             if(currentCell == null){
-                return startCoordinates;
+                return Collections.singletonList(startCoordinates);
             }
 
-            ArrayList<Coordinates> nearCells = findNearCells(currentCell);
+            List<Coordinates> nearCells = findNearCells(currentCell);
             coordinatesForVisited.addAll(nearCells);
             for (Coordinates nearCell : nearCells){
                 visitedCoordinates.put(nearCell, new ParentsDistanceForCoordinates(distance, currentCell));
@@ -53,18 +53,18 @@ public class FindPath {
 //        for (HashMap.Entry<Coordinates, ParentsDistanceForCoordinates> coordinates123 : visitedCoordinates.entrySet()){
 //            System.out.println(coordinates123.getKey().getRow() +" "+ coordinates123.getKey().getColumn() +" "+ coordinates123.getValue().getDistance() +" "+ coordinates123.getValue().getParents().getRow()+" "+ coordinates123.getValue().getParents().getColumn());
 //        }
-        List<Coordinates> wholePath = findWholePath(currentCell);
+
+        return findWholePath(currentCell);
 
 //        for(Coordinates coordinates: wholePath){
 //            System.out.println("row: " + coordinates.getRow() + " column: " + coordinates.getColumn());
 //        }
 
 
-        return wholePath.getFirst();
     }
 
-    private ArrayList<Coordinates> findNearCells(Coordinates currentCell){
-        ArrayList<Coordinates> nearCells = new ArrayList<>();
+    private List<Coordinates> findNearCells(Coordinates currentCell){
+        List<Coordinates> nearCells = new ArrayList<>();
         int rowShift = -1, columnShift = -1;
         while(rowShift < 1 || columnShift <= 1) {
             if(columnShift > 1){
@@ -96,9 +96,6 @@ public class FindPath {
     private boolean isValidCell(Coordinates coordinates){
         return coordinates.getRow() >= 0 && coordinates.getColumn() >= 0
                 && coordinates.getRow() <= map.getMaxRow() - 1 && coordinates.getColumn() <= map.getMaxColumn() - 1
-//                && !(map.getEntities(coordinates) instanceof Tree)
-//                && !(map.getEntities(coordinates) instanceof Rock)
-//                && !(map.getEntities(coordinates) instanceof Predator)
                 && !coordinatesForVisited.contains(coordinates)
                 && !visitedCoordinates.containsKey(coordinates)
                 && (map.isEmpty(coordinates) || (!map.isEmpty(coordinates) && map.getEntities(coordinates).equals(aim)));

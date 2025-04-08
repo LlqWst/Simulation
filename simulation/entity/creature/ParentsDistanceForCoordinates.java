@@ -2,8 +2,6 @@ package simulation.entity.creature;
 
 import simulation.Coordinates;
 
-import java.util.Objects;
-
 public class ParentsDistanceForCoordinates {
 
     private final int distance;
