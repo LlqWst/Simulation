@@ -13,6 +13,8 @@ public class Simulation {
     private int turnCounter;
     private final Map map = new Map();
     MapRenderer renderer = new MapRenderer(map);
+    Scanner scanner = new Scanner(System.in);
+    String input = scanner.nextLine();
 
     public Simulation() {
         this.turnCounter = 0;
@@ -70,11 +72,11 @@ public class Simulation {
                             map.setEntities(coordinates.getLast(), new Herbivore(hp));
                             //temp.put(coordinates.getLast(), new Herbivore(hp));
                             if(temp.get(coordinates.getLast()) != null && temp.get(coordinates.getLast()) instanceof Herbivore){
-                                ((Herbivore) temp.get(coordinates.getLast())).setHp(hp);
-                                //temp.replace(coordinates.getLast(), new Herbivore(hp));
+                                //((Herbivore) temp.get(coordinates.getLast())).setHp(hp);
+                                temp.replace(coordinates.getLast(), new Herbivore(hp));
                             }
-                            ((Herbivore)  map.getEntities(coordinates.getLast())).setHp(hp);
-                           // map.getAllEntities().replace(coordinates.getLast(), new Herbivore(hp));
+                            //((Herbivore)  map.getEntities(coordinates.getLast())).setHp(hp);
+                            map.getAllEntities().replace(coordinates.getLast(), new Herbivore(hp));
                         } else {
                             map.getAllEntities().remove(coordinates.getLast());
                                 //temp.replace(coordinates.getLast(), null);
@@ -100,14 +102,19 @@ public class Simulation {
     }
 
     public void game(){
-        Scanner scanner = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         actRenderAddSomeEntities();
+        boolean check = true;
         do {
             turnCounter++;
             System.out.println("Counter: " + turnCounter);
             nextTurn();
-        } while (scanner.nextInt() != 3);
-        //} while (true);
+            if (input.equals("1")){
+                break;
+            }
+
+        //} while (scanner.nextInt() != 3);
+        } while (check);
     }
 
     private void actRenderAddSomeEntities(){
