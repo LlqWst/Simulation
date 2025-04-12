@@ -1,33 +1,32 @@
 package simulation.entity.creature;
 
 import simulation.Coordinates;
-import simulation.Map;
+import simulation.GameMap;
 import simulation.entity.*;
 
 import java.util.*;
 
 public class FindPath {
-    private final Map map;
-    private final Entity aim;
+    private final GameMap gameMap;
+    private final Entity goal;
     private final Coordinates startCoordinates;
 
     private final Queue<Coordinates> coordinatesForVisited = new ArrayDeque<>();
-    private final java.util.Map<Coordinates, ParentsDistanceForCoordinates> visitedCoordinates = new HashMap<>();
+    private final Map<Coordinates, Coordinates> visitedCoordinates = new HashMap<>();
 
-    public FindPath(Coordinates coordinates, Map map, Entity aim) {
-        this.map = map;
-        this.aim = aim;
+    public FindPath(Coordinates coordinates, GameMap gameMap, Entity goal) {
+        this.gameMap = gameMap;
+        this.goal = goal;
         this.startCoordinates = coordinates;
         coordinatesForVisited.add(coordinates);
-        visitedCoordinates.put(coordinates, new ParentsDistanceForCoordinates(0, coordinates));
+        visitedCoordinates.put(coordinates, coordinates);
     }
 
     public List<Coordinates> findPath(){
 
-        int distance = 0;
         Coordinates currentCell;
 
-        if(!map.getAllEntities().containsValue(aim)){
+        if(!gameMap.getAllEntities().containsValue(goal)){
             return Collections.singletonList(startCoordinates);
         }
 
@@ -40,15 +39,14 @@ public class FindPath {
             List<Coordinates> nearCells = findNearCells(currentCell);
             coordinatesForVisited.addAll(nearCells);
             for (Coordinates nearCell : nearCells){
-                visitedCoordinates.put(nearCell, new ParentsDistanceForCoordinates(distance, currentCell));
-                if(!map.isEmpty(nearCell) && map.getEntities(nearCell).getClass() == aim.getClass()){
+                visitedCoordinates.put(nearCell, currentCell);
+                if(!gameMap.isEmpty(nearCell) && gameMap.getEntities(nearCell).getClass() == goal.getClass()){
                     currentCell = nearCell;
                     break;
                 }
             }
-            distance++;
             //System.out.println(currentCell.getRow() + " " + currentCell.getColumn());
-        } while (map.isEmpty(currentCell) || map.getEntities(currentCell).getClass() != aim.getClass());
+        } while (gameMap.isEmpty(currentCell) || gameMap.getEntities(currentCell).getClass() != goal.getClass());
 
 //        for (HashMap.Entry<Coordinates, ParentsDistanceForCoordinates> coordinates123 : visitedCoordinates.entrySet()){
 //            System.out.println(coordinates123.getKey().getRow() +" "+ coordinates123.getKey().getColumn() +" "+ coordinates123.getValue().getDistance() +" "+ coordinates123.getValue().getParents().getRow()+" "+ coordinates123.getValue().getParents().getColumn());
@@ -85,20 +83,20 @@ public class FindPath {
             nearCells.add(coordinates);
             columnShift++;
         }
-
+        return nearCells;
 //        for (Coordinates coordinates1 : nearCells){
 //            System.out.println("row: " + coordinates1.getRow() + " column:" + coordinates1.getColumn());
 //        }
 
-        return nearCells;
+
     }
 
     private boolean isValidCell(Coordinates coordinates){
         return coordinates.getRow() >= 0 && coordinates.getColumn() >= 0
-                && coordinates.getRow() <= map.getMaxRow() - 1 && coordinates.getColumn() <= map.getMaxColumn() - 1
+                && coordinates.getRow() <= gameMap.getMaxRow() - 1 && coordinates.getColumn() <= gameMap.getMaxColumn() - 1
                 && !coordinatesForVisited.contains(coordinates)
                 && !visitedCoordinates.containsKey(coordinates)
-                && (map.isEmpty(coordinates) || (!map.isEmpty(coordinates) && map.getEntities(coordinates).equals(aim)));
+                && (gameMap.isEmpty(coordinates) || (!gameMap.isEmpty(coordinates) && gameMap.getEntities(coordinates).equals(goal)));
     }
 
     private List<Coordinates> findWholePath(Coordinates aimCell){
@@ -107,7 +105,7 @@ public class FindPath {
         List<Coordinates> result = new ArrayList<>();
         do {
            result.add(pathPart);
-           pathPart = visitedCoordinates.get(pathPart).getParents();
+           pathPart = visitedCoordinates.get(pathPart);
         } while(!pathPart.equals(startCoordinates));
 
         return result.reversed();

@@ -11,17 +11,17 @@ public class MapRenderer {
     private static final String EMOJI_ROCK = "⛰️";
     private static final String EMOJI_EARTH = "\uD83D\uDFEB";
 
-    private final Map map;
+    private final GameMap gameMap;
 
-    public MapRenderer(Map map) {
-        this.map = map;
+    public MapRenderer(GameMap gameMap) {
+        this.gameMap = gameMap;
     }
 
     public void render(){
         System.out.println();
-        for (int row = 0; row < map.getMaxRow(); row++) {
+        for (int row = 0; row < gameMap.getMaxRow(); row++) {
             String line = "";
-            for (int column = 0; column < map.getMaxColumn(); column++) {
+            for (int column = 0; column < gameMap.getMaxColumn(); column++) {
                 line += ANSI_BLACK_BACKGROUND;
                 line += entitySprite(new Coordinates(row, column));
             }
@@ -31,11 +31,11 @@ public class MapRenderer {
 
     public String entitySprite(Coordinates coordinates){
 
-        if(map.isEmpty(coordinates)){
+        if(gameMap.isEmpty(coordinates)){
             return EMOJI_EARTH;
         }
 
-        return switch (map.getEntities(coordinates).getClass().getSimpleName()) {
+        return switch (gameMap.getEntities(coordinates).getClass().getSimpleName()) {
             case "Herbivore" -> EMOJI_HERBIVORE;
             case "Predator" -> EMOJI_PREDATOR;
             case "Grass" -> EMOJI_GRASS;

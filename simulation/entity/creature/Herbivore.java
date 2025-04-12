@@ -1,42 +1,27 @@
 package simulation.entity.creature;
 
-import simulation.Coordinates;
-import simulation.Map;
-import simulation.entity.*;
 import simulation.entity.staticObjects.Grass;
 
-import java.util.List;
+public class Herbivore extends Creature{
 
-public class Herbivore extends Creature {
-
-    private int hp;
-    private static final int speed = 2;
-    private static final Entity goal = new Grass();
+    private final int hp;
 
     public Herbivore() {
+        super(2, new Grass());
         this.hp = 12;
     }
 
-    public Herbivore(int hp) {
+    public Herbivore(int hp, int id) {
+        super(2, new Grass());
         this.hp = hp;
-    }
-
-    @Override
-    public int getSpeed() {
-        return speed;
+        this.id = id;
     }
 
     public int getHp() {
-        return hp;
+        return this.hp;
     }
 
-    public int setHp(int hp) {
-        return this.hp = hp;
+    public boolean shouldEat (int rangeToGrass){
+        return rangeToGrass == 1;
     }
-
-    @Override
-    public List<Coordinates> makeMove(Coordinates coordinates, Map map) {
-        return new FindPath(coordinates, map, goal).findPath();
-    }
-
 }
