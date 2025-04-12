@@ -4,13 +4,13 @@ import simulation.Coordinates;
 import simulation.GameMap;
 import simulation.entity.Entity;
 
+import java.nio.charset.CoderResult;
 import java.util.List;
 
 public abstract class Creature extends Entity {
 
     protected int speed;
     protected Entity goal;
-
     protected int id;
 
     public Creature(int speed, Entity goal) {
@@ -24,7 +24,7 @@ public abstract class Creature extends Entity {
     }
 
     public List<Coordinates> makeMove(Coordinates coordinates, GameMap gameMap){
-        return new FindPath(coordinates, gameMap, goal).findPath();
+        return new PathFinder(coordinates, gameMap, goal).findPath();
     }
 
     public int getSpeed(){
@@ -34,6 +34,5 @@ public abstract class Creature extends Entity {
     public Entity getGoal(){
         return this.goal;
     }
-
 
 }

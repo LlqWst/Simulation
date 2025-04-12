@@ -41,7 +41,7 @@ public class MapRenderer {
             case "Grass" -> EMOJI_GRASS;
             case "Tree" -> EMOJI_TREE;
             case "Rock" -> EMOJI_ROCK;
-            default -> EMOJI_ROCK;
+            default -> "";
         };
     }
 

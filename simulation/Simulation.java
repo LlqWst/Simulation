@@ -1,7 +1,5 @@
 package simulation;
 
-
-
 import simulation.entity.actions.AddNewEntities;
 import simulation.entity.actions.InitActions;
 import simulation.entity.actions.MakeMove;
@@ -33,21 +31,22 @@ public void startSimulation(){
     initActions.execute();
     renderer.render();
     do {
-        if(!gameMap.getAllEntities().containsValue(new Herbivore()) || !gameMap.getAllEntities().containsValue(new Grass())){
+        System.out.println("Turn:" + ++turnCounter);
+        if(!gameMap.isContainsHerbivore() || !gameMap.isContainsGrass()){
             addNewEntities.execute();
             renderer.render();
         }
         makeMove.execute();
-        renderer.render();
+        actRender();
 
-   // } while (scanner.nextInt() != 3);
-        } while (true);
+    } while (scanner.nextInt() != 3);
+     //   } while (true);
 }
 
-    private void actRenderAddSomeEntities(){
-
+    private void actRender(){
+        renderer.render();
         try {
-            Thread.sleep(1000);
+            Thread.sleep(0);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

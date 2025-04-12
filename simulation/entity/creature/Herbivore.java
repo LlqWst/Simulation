@@ -1,6 +1,10 @@
 package simulation.entity.creature;
 
+import simulation.Coordinates;
+import simulation.GameMap;
 import simulation.entity.staticObjects.Grass;
+
+import java.util.List;
 
 public class Herbivore extends Creature{
 
@@ -21,7 +25,20 @@ public class Herbivore extends Creature{
         return this.hp;
     }
 
-    public boolean shouldEat (int rangeToGrass){
+    public Coordinates action(Coordinates coordinates, GameMap gameMap){
+        List<Coordinates> path = super.makeMove(coordinates, gameMap);
+        int pathSize = path.size();
+        if(shouldEat(pathSize) || path.getFirst() == coordinates){
+            return path.getFirst();
+        } else if(pathSize > speed){
+            return path.get(speed - 1);
+        } else {
+            return path.get(pathSize - 2);
+        }
+    }
+
+    private boolean shouldEat (int rangeToGrass){
         return rangeToGrass == 1;
     }
+
 }

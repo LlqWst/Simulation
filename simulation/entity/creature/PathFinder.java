@@ -6,7 +6,7 @@ import simulation.entity.*;
 
 import java.util.*;
 
-public class FindPath {
+public class PathFinder {
     private final GameMap gameMap;
     private final Entity goal;
     private final Coordinates startCoordinates;
@@ -14,7 +14,7 @@ public class FindPath {
     private final Queue<Coordinates> coordinatesForVisited = new ArrayDeque<>();
     private final Map<Coordinates, Coordinates> visitedCoordinates = new HashMap<>();
 
-    public FindPath(Coordinates coordinates, GameMap gameMap, Entity goal) {
+    public PathFinder(Coordinates coordinates, GameMap gameMap, Entity goal) {
         this.gameMap = gameMap;
         this.goal = goal;
         this.startCoordinates = coordinates;

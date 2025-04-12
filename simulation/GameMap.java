@@ -4,6 +4,7 @@ import simulation.entity.*;
 import simulation.entity.creature.Creature;
 import simulation.entity.creature.Herbivore;
 import simulation.entity.creature.Predator;
+import simulation.entity.staticObjects.Grass;
 
 import java.util.*;
 
@@ -36,6 +37,9 @@ public class GameMap {
     }
 
     public void removeEntities(Coordinates coordinates) {
+        if(isEmpty(coordinates)){
+            throw new IllegalArgumentException();
+        }
         entities.remove(coordinates);
     }
 
@@ -65,11 +69,11 @@ public class GameMap {
     }
 
     public boolean isHerbivore(Coordinates coordinates){
-        return getEntities(coordinates) instanceof Herbivore;
+        return !isEmpty(coordinates) && getEntities(coordinates) instanceof Herbivore;
     }
 
     public boolean isPredator(Coordinates coordinates){
-        return getEntities(coordinates) instanceof Predator;
+        return !isEmpty(coordinates) && getEntities(coordinates) instanceof Predator;
     }
 
     public boolean isContainsId(Coordinates coordinates, int id){
@@ -77,6 +81,14 @@ public class GameMap {
             return creature.getId() == id;
         }
         return false;
+    }
+
+    public boolean isContainsHerbivore(){
+        return entities.containsValue(new Herbivore());
+    }
+
+    public boolean isContainsGrass(){
+        return entities.containsValue(new Grass());
     }
 
     public Coordinates getRandomEmptyCoordinates(){
