@@ -1,4 +1,4 @@
-package simulation.entity.actions;
+package simulation.actions;
 
 import simulation.GameMap;
 import simulation.entity.creature.Herbivore;

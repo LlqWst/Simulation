@@ -1,4 +1,4 @@
-package simulation.entity.actions;
+package simulation.actions;
 
 import simulation.Coordinates;
 import simulation.GameMap;

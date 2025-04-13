@@ -1,4 +1,4 @@
-package simulation.entity.actions;
+package simulation.actions;
 
 public abstract class Actions {
     public abstract void execute();
