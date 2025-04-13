@@ -1,7 +1,7 @@
 package simulation.entity.creature;
 
-import simulation.Coordinates;
-import simulation.GameMap;
+import simulation.gameMap.Coordinates;
+import simulation.gameMap.GameMap;
 import simulation.entity.staticObjects.Grass;
 
 import java.util.List;
@@ -11,12 +11,12 @@ public class Herbivore extends Creature{
     private final int hp;
 
     public Herbivore() {
-        super(2, new Grass());
-        this.hp = 12;
+        super(parameters.getSpeed(), new Grass());
+        this.hp = parameters.getHp();
     }
 
-    public Herbivore(int hp, int id) {
-        super(2, new Grass());
+    public Herbivore(int speed, int hp, int id) {
+        super(speed, new Grass());
         this.hp = hp;
         this.id = id;
     }

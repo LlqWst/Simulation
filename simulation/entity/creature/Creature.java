@@ -1,7 +1,8 @@
 package simulation.entity.creature;
 
-import simulation.Coordinates;
-import simulation.GameMap;
+import simulation.Parameters;
+import simulation.gameMap.Coordinates;
+import simulation.gameMap.GameMap;
 import simulation.IdGenerator;
 import simulation.entity.Entity;
 import simulation.PathFinder;
@@ -13,6 +14,7 @@ public abstract class Creature extends Entity {
     protected int speed;
     protected Entity goal;
     protected int id = IdGenerator.generateId();
+    protected static final Parameters parameters = new Parameters();
 
     public Creature(int speed, Entity goal) {
         this.speed = speed;
@@ -21,6 +23,10 @@ public abstract class Creature extends Entity {
 
     public int getId() {
         return this.id;
+    }
+
+    public int getSpeed() {
+        return this.speed;
     }
 
     abstract public Coordinates makeMove(Coordinates coordinates, GameMap gameMap);

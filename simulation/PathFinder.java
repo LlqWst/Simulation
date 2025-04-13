@@ -1,6 +1,8 @@
 package simulation;
 
 import simulation.entity.Entity;
+import simulation.gameMap.Coordinates;
+import simulation.gameMap.GameMap;
 
 import java.util.*;
 

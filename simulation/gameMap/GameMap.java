@@ -1,4 +1,4 @@
-package simulation;
+package simulation.gameMap;
 
 import simulation.entity.*;
 import simulation.entity.creature.Creature;
@@ -15,7 +15,7 @@ public class GameMap {
     private final Map<Coordinates, Entity> entities = new HashMap<>();
 
     public GameMap() {
-        this.MAX_COLUMN = 8;
+        this.MAX_COLUMN = 12;
         this.MAX_ROW = 8;
     }
 
@@ -50,6 +50,26 @@ public class GameMap {
         return entities.get(coordinates);
     }
 
+    public int getCountGrass(){
+        int counter = 0;
+        for (Entity entity : entities.values()){
+            if(entity instanceof Grass){
+                ++counter;
+            }
+        }
+        return counter;
+    }
+
+    public int getCountHerbivore(){
+        int counter = 0;
+        for (Entity entity : entities.values()){
+            if(entity instanceof Herbivore){
+                ++counter;
+            }
+        }
+        return counter;
+    }
+
     public boolean isEmpty(Coordinates coordinates) {
         return entities.get(coordinates) == null;
     }
@@ -70,6 +90,10 @@ public class GameMap {
 
     public boolean isPredator(Coordinates coordinates){
         return !isEmpty(coordinates) && getEntities(coordinates) instanceof Predator;
+    }
+
+    public boolean isGrass(Coordinates coordinates){
+        return !isEmpty(coordinates) && getEntities(coordinates) instanceof Grass;
     }
 
     public boolean isContains(Entity entity){

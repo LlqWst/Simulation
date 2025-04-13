@@ -3,6 +3,8 @@ package simulation;
 import simulation.actions.AddNewEntities;
 import simulation.actions.InitActions;
 import simulation.actions.MakeMove;
+import simulation.gameMap.GameMap;
+import simulation.gameMap.GameMapRenderer;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -12,7 +14,7 @@ public class Simulation {
     private final AtomicBoolean isRunnable = new AtomicBoolean(true);
     private final AtomicBoolean isStart = new AtomicBoolean(false);
     private final AtomicBoolean isEnd = new AtomicBoolean(false);
-    private final MapRenderer renderer;
+    private final GameMapRenderer renderer;
     private final InitActions initActions;
     private final MakeMove makeMove;
     private final AddNewEntities addNewEntities;
@@ -20,7 +22,7 @@ public class Simulation {
 
     public Simulation(GameMap gameMap, InitActions initActions, MakeMove makeMove, AddNewEntities addNewEntities) {
         this.turnCounter = 0;
-        this.renderer = new MapRenderer(gameMap);
+        this.renderer = new GameMapRenderer(gameMap);
         this.initActions = initActions;
         this.makeMove = makeMove;
         this.addNewEntities = addNewEntities;

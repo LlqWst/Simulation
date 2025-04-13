@@ -3,6 +3,7 @@ package simulation;
 import simulation.actions.AddNewEntities;
 import simulation.actions.InitActions;
 import simulation.actions.MakeMove;
+import simulation.gameMap.GameMap;
 
 
 public class Main {

@@ -8,7 +8,7 @@ public class InputCommands {
     public final static int EXIT = 4;
 
     public int parsInt(String input){
-        int command = 0;
+        int command;
         try {
             command = Integer.parseInt(input);
         } catch (IllegalArgumentException e){

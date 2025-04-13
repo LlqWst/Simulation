@@ -1,10 +1,9 @@
 package simulation.actions;
 
-import simulation.Coordinates;
-import simulation.GameMap;
+import simulation.gameMap.Coordinates;
+import simulation.gameMap.GameMap;
 import simulation.entity.creature.Herbivore;
 import simulation.entity.creature.Predator;
-import simulation.entity.staticObjects.Grass;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,7 +68,7 @@ public class MakeMove extends Actions{
         int hp = hrb.getHp() - predator.doDamage();
         gameMap.removeEntities(hrbCoordinates);
         if (hp > 0) {
-            gameMap.setEntities(hrbCoordinates, new Herbivore(hp, hrb.getId()));
+            gameMap.setEntities(hrbCoordinates, new Herbivore(hrb.getSpeed(), hp, hrb.getId()));
         }
     }
 
@@ -77,7 +76,7 @@ public class MakeMove extends Actions{
         StringBuilder line = new StringBuilder("hrb id:" + id);
         line.append(", R:").append(startCoordinates.row());
         line.append(", C:").append(startCoordinates.column());
-        if (!gameMap.isEmpty(newCoordinates) && gameMap.getEntities(newCoordinates) instanceof Grass) {
+        if (!gameMap.isGrass(newCoordinates)) {
             line.append(" Eating");
         }
         line.append(" -> R:").append(newCoordinates.row());

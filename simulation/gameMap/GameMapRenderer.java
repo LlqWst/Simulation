@@ -1,6 +1,6 @@
-package simulation;
+package simulation.gameMap;
 
-public class MapRenderer {
+public class GameMapRenderer {
 
     private static final String ANSI_BLACK_BACKGROUND = "\u001B[0;100m";
     private static final String ANSI_COLOR_RESET = "\u001B[0m";
@@ -13,7 +13,7 @@ public class MapRenderer {
 
     private final GameMap gameMap;
 
-    public MapRenderer(GameMap gameMap) {
+    public GameMapRenderer(GameMap gameMap) {
         this.gameMap = gameMap;
     }
 

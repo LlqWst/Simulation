@@ -1,7 +1,7 @@
 package simulation.entity.creature;
 
-import simulation.Coordinates;
-import simulation.GameMap;
+import simulation.gameMap.Coordinates;
+import simulation.gameMap.GameMap;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ public class Predator extends Creature {
     private final int range;
 
     public Predator() {
-        super(1, new Herbivore());
-        this.damage = 4;
-        this.range = 1;
+        super(parameters.getSpeed(), new Herbivore());
+        this.damage = parameters.getDamage();
+        this.range = parameters.getRange();
     }
 
     public int doDamage() {
