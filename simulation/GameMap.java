@@ -54,10 +54,6 @@ public class GameMap {
         return entities.get(coordinates) == null;
     }
 
-    public Map<Coordinates, Entity> getAllEntities() {
-        return entities;
-    }
-
     public Map<Coordinates, Integer> getCreatures(){
         Map<Coordinates, Integer> creatures = new HashMap<>();
         for(Map.Entry<Coordinates, Entity> entity : entities.entrySet()){
@@ -76,6 +72,10 @@ public class GameMap {
         return !isEmpty(coordinates) && getEntities(coordinates) instanceof Predator;
     }
 
+    public boolean isContains(Entity entity){
+        return entities.containsValue(entity);
+    }
+
     public boolean isContainsId(Coordinates coordinates, int id){
         if(getEntities(coordinates) instanceof Creature creature){
             return creature.getId() == id;
@@ -84,11 +84,11 @@ public class GameMap {
     }
 
     public boolean isContainsHerbivore(){
-        return entities.containsValue(new Herbivore());
+        return entities.values().stream().anyMatch(value -> value.getClass() == Herbivore.class);
     }
 
     public boolean isContainsGrass(){
-        return entities.containsValue(new Grass());
+        return entities.values().stream().anyMatch(value -> value.getClass() == Grass.class);
     }
 
     public Coordinates getRandomEmptyCoordinates(){
@@ -105,5 +105,4 @@ public class GameMap {
         int randomCoordinates = random.nextInt(allEmptyCoordinates.size());
         return allEmptyCoordinates.get(randomCoordinates);
     }
-
 }

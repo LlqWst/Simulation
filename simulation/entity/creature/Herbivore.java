@@ -25,8 +25,8 @@ public class Herbivore extends Creature{
         return this.hp;
     }
 
-    public Coordinates action(Coordinates coordinates, GameMap gameMap){
-        List<Coordinates> path = super.makeMove(coordinates, gameMap);
+    public Coordinates makeMove(Coordinates coordinates, GameMap gameMap){
+        List<Coordinates> path = super.findPath(coordinates, gameMap);
         int pathSize = path.size();
         if(shouldEat(pathSize) || path.getFirst() == coordinates){
             return path.getFirst();

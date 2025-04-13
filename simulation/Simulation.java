@@ -3,9 +3,6 @@ package simulation;
 import simulation.entity.actions.AddNewEntities;
 import simulation.entity.actions.InitActions;
 import simulation.entity.actions.MakeMove;
-import simulation.entity.creature.Herbivore;
-
-import simulation.entity.staticObjects.Grass;
 
 import java.util.*;
 
@@ -34,13 +31,13 @@ public void startSimulation(){
         System.out.println("Turn:" + ++turnCounter);
         if(!gameMap.isContainsHerbivore() || !gameMap.isContainsGrass()){
             addNewEntities.execute();
-            renderer.render();
+            actRender();
         }
         makeMove.execute();
         actRender();
 
-    } while (scanner.nextInt() != 3);
-     //   } while (true);
+   // } while (scanner.nextInt() != 3);
+        } while (true);
 }
 
     private void actRender(){

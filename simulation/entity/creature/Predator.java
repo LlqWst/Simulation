@@ -16,16 +16,12 @@ public class Predator extends Creature {
         this.range = 1;
     }
 
-    public int getRange() {
-        return this.range;
-    }
-
     public int doDamage() {
         return this.damage;
     }
 
-    public Coordinates move(Coordinates coordinates, GameMap gameMap){
-        List<Coordinates> path = super.makeMove(coordinates, gameMap);
+    public Coordinates makeMove(Coordinates coordinates, GameMap gameMap){
+        List<Coordinates> path = super.findPath(coordinates, gameMap);
         int pathSize = path.size();
         if(path.getFirst() == coordinates){
             return path.getFirst();

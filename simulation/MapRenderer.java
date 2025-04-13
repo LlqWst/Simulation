@@ -20,10 +20,10 @@ public class MapRenderer {
     public void render(){
         System.out.println();
         for (int row = 0; row < gameMap.getMaxRow(); row++) {
-            String line = "";
+            StringBuilder line = new StringBuilder();
             for (int column = 0; column < gameMap.getMaxColumn(); column++) {
-                line += ANSI_BLACK_BACKGROUND;
-                line += entitySprite(new Coordinates(row, column));
+                line.append(ANSI_BLACK_BACKGROUND);
+                line.append(entitySprite(new Coordinates(row, column)));
             }
             System.out.println(line + ANSI_COLOR_RESET);
         }
