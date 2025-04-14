@@ -6,104 +6,53 @@ import simulation.actions.MakeMove;
 import simulation.gameMap.GameMap;
 import simulation.gameMap.GameMapRenderer;
 
-import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Simulation {
-    private int turnCounter;
+    private int turnCounter = 0;
     private final AtomicBoolean isRunnable = new AtomicBoolean(true);
-    private final AtomicBoolean isStart = new AtomicBoolean(false);
-    private final AtomicBoolean isEnd = new AtomicBoolean(false);
     private final GameMapRenderer renderer;
     private final InitActions initActions;
     private final MakeMove makeMove;
     private final AddNewEntities addNewEntities;
-    private final InputCommands commands;
+    private final Menu menu = new Menu(this);
 
     public Simulation(GameMap gameMap, InitActions initActions, MakeMove makeMove, AddNewEntities addNewEntities) {
-        this.turnCounter = 0;
         this.renderer = new GameMapRenderer(gameMap);
         this.initActions = initActions;
         this.makeMove = makeMove;
         this.addNewEntities = addNewEntities;
-        this.commands = new InputCommands();
     }
 
     private void commandInput() {
-        Scanner scanner = new Scanner(System.in);
-        Thread inputThread = new Thread(() -> {
-            while (true) {
-               String input = scanner.nextLine();
-               int command = commands.parsInt(input);
-               if (isStarting(command)) {
-                   simulationStart();
-               } else if (isContinue(command)) {
-                   simulationContinue();
-               } else if (isPause(command)){
-                   simulationPause();
-               } else if (isExit(command)) {
-                   simulationExit();
-               }
-            }
-        });
-        inputThread.setUncaughtExceptionHandler((thread, exception) -> {
-            System.err.println("An exception was caught during input " + exception.getMessage());
-            System.exit(1);
-        });
-        inputThread.setDaemon(true);
-        inputThread.start();
+        menu.showMenu();
+        while (true) {
+            menu.awaitingInput();
+        }
     }
 
-    private void simulationStart(){
-        isStart.set(true);
-        System.out.println("Simulation is starting");
+    public void simulationStart() {
+        simulation();
     }
 
-    private boolean isStarting(int command){
-        return !isStart.get() && command == InputCommands.START;
-    }
-
-    private boolean isContinue(int command) {
-        return isStart.get() && !isRunnable.get() && command == InputCommands.CONTINUE;
-    }
-
-    private boolean isPause(int command) {
-        return isStart.get() && isRunnable.get() && command == InputCommands.PAUSE;
-    }
-
-    private boolean isExit(int command) {
-        return command == InputCommands.EXIT;
-    }
-
-    private void simulationContinue(){
+    public void simulationContinue() {
         isRunnable.set(true);
-        System.out.println("Simulation is continue");
     }
 
-    private void simulationPause(){
+    public void simulationPause() {
         isRunnable.set(false);
-        System.out.println("Simulation on pause");
     }
 
-    private void simulationExit(){
-        isEnd.set(true);
-        System.out.println("Simulation is over");
+    public void simulationExit() {
+        System.exit(0);
     }
 
-    private void awaitingInitialInput(){
-        commandInput();
-        while (!isStart.get() && !isEnd.get()){
-        }
+    private void initActions() {
+        initActions.execute();
     }
 
-    private void initActions(){
-        if(isStart.get()) {
-            initActions.execute();
-        }
-    }
-
-    private void nextTurn(){
-        if(isStart.get() && isRunnable.get()) {
+    private void nextTurn() {
+        if (isRunnable.get()) {
             printTurns();
             addNewEntities.execute();
             makeMove.execute();
@@ -111,26 +60,37 @@ public class Simulation {
         }
     }
 
-    public void startSimulation(){
-        commands.menu();
-        awaitingInitialInput();
+    private void startSimulation() {
         initActions();
-        while (!isEnd.get()){
+        while (true) {
             nextTurn();
         }
     }
 
-    private void printTurns(){
+    public void execute() {
+        commandInput();
+    }
+
+    private void simulation() {
+        Thread simulationRunnable = new Thread(this::startSimulation);
+        simulationRunnable.setUncaughtExceptionHandler((thread, exception) -> {
+            System.err.println("An exception was caught during simulation " + exception.getMessage());
+            System.exit(1);
+        });
+        simulationRunnable.setDaemon(true);
+        simulationRunnable.start();
+    }
+
+    private void printTurns() {
         System.out.println("Turn:" + ++turnCounter);
     }
 
-    private void actRender(){
+    private void actRender() {
         renderer.render();
         try {
-            Thread.sleep(1000);
+            Thread.sleep(1200);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
-
 }

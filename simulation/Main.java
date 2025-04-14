@@ -13,6 +13,6 @@ public class Main {
         MakeMove makeMove = new MakeMove(gameMap);
         AddNewEntities addNewEntities = new AddNewEntities(gameMap);
         Simulation simulation = new Simulation(gameMap, initActions, makeMove, addNewEntities);
-        simulation.startSimulation();
+        simulation.execute();
     }
 }

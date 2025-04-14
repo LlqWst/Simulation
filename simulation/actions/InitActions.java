@@ -7,6 +7,7 @@ import simulation.entity.staticObjects.*;
 
 public class InitActions extends Actions{
     private final GameMap gameMap;
+    private final Parameters parameters = new Parameters();
 
     public InitActions(GameMap gameMap) {
         this.gameMap = gameMap;
