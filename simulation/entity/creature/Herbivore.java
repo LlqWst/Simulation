@@ -11,12 +11,17 @@ public class Herbivore extends Creature{
     private final int hp;
 
     public Herbivore() {
-        super(parameters.getSpeed(), new Grass());
-        this.hp = parameters.getHp();
+        super(parameters.getRandomSpeed(), Grass.class);
+        this.hp = parameters.getRandomHp();
+    }
+
+    public Herbivore(int speed, int hp) {
+        super(speed, Grass.class);
+        this.hp = hp;
     }
 
     public Herbivore(int speed, int hp, int id) {
-        super(speed, new Grass());
+        super(speed, Grass.class);
         this.hp = hp;
         this.id = id;
     }

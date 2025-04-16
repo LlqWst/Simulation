@@ -97,10 +97,12 @@ public class Menu {
     }
 
     public void showMenu(){
+        System.out.println("----------------------------------------");
         System.out.println("Select one of the commands:");
         System.out.println("["+ START +"]" + "  —  start Simulation");
         System.out.println("["+ CONTINUE +"]" + "  —  continue Simulation");
         System.out.println("["+ PAUSE +"]" + "  —  pause Simulation");
         System.out.println("["+ EXIT +"]" + "  —  exit Simulation");
+        System.out.println("----------------------------------------");
     }
 }

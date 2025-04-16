@@ -12,11 +12,11 @@ import java.util.List;
 public abstract class Creature extends Entity {
 
     protected int speed;
-    protected Entity goal;
+    protected Class<? extends Entity> goal;
     protected int id = IdGenerator.generateId();
     protected static final Parameters parameters = new Parameters();
 
-    public Creature(int speed, Entity goal) {
+    public Creature(int speed, Class<? extends Entity> goal) {
         this.speed = speed;
         this.goal = goal;
     }

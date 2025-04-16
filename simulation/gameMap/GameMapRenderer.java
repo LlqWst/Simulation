@@ -41,7 +41,7 @@ public class GameMapRenderer {
             case "Grass" -> EMOJI_GRASS;
             case "Tree" -> EMOJI_TREE;
             case "Rock" -> EMOJI_ROCK;
-            default -> "";
+            case null, default -> throw new IllegalArgumentException();
         };
     }
 

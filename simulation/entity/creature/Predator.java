@@ -1,5 +1,6 @@
 package simulation.entity.creature;
 
+import simulation.entity.Entity;
 import simulation.gameMap.Coordinates;
 import simulation.gameMap.GameMap;
 
@@ -11,9 +12,15 @@ public class Predator extends Creature {
     private final int range;
 
     public Predator() {
-        super(parameters.getSpeed(), new Herbivore());
-        this.damage = parameters.getDamage();
-        this.range = parameters.getRange();
+        super(parameters.getRandomSpeed(), Herbivore.class);
+        this.damage = parameters.getRandomDamage();
+        this.range = parameters.getRandomRange();
+    }
+
+    public Predator(int speed, int damage, int range) {
+        super(speed, Herbivore.class);
+        this.damage = damage;
+        this.range = range;
     }
 
     public int doDamage() {

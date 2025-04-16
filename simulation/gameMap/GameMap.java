@@ -1,9 +1,7 @@
 package simulation.gameMap;
 
 import simulation.entity.*;
-import simulation.entity.creature.Creature;
-import simulation.entity.creature.Herbivore;
-import simulation.entity.creature.Predator;
+import simulation.entity.creature.*;
 import simulation.entity.staticObjects.Grass;
 
 import java.util.*;
@@ -36,6 +34,12 @@ public class GameMap {
         entities.put(coordinates, entity);
     }
 
+    public void setEntitiesOnRandomCoordinates(Entity entity, int count) {
+        for(int i = 0; i < count; i++) {
+            entities.put(getRandomEmptyCoordinates(), entity);
+        }
+    }
+
     public void removeEntities(Coordinates coordinates) {
         if(isEmpty(coordinates)){
             throw new IllegalArgumentException();
@@ -50,25 +54,26 @@ public class GameMap {
         return entities.get(coordinates);
     }
 
-    public int getCountGrass(){
+    public int getCountEntity(Entity e){
         int counter = 0;
-        for (Entity entity : entities.values()){
-            if(entity instanceof Grass){
-                ++counter;
+        for(Entity entity : entities.values()){
+            if(e.getClass() == entity.getClass()){
+                counter++;
             }
         }
         return counter;
     }
 
-    public int getCountHerbivore(){
+    public int getCountEntity1(Class<? extends Entity> clazz){
         int counter = 0;
-        for (Entity entity : entities.values()){
-            if(entity instanceof Herbivore){
-                ++counter;
+        for(Entity entity : entities.values()){
+            if(clazz == entity.getClass()){
+                counter++;
             }
         }
         return counter;
     }
+
 
     public boolean isEmpty(Coordinates coordinates) {
         return entities.get(coordinates) == null;

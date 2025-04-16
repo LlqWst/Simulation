@@ -1,34 +1,24 @@
 package simulation;
 
-import simulation.actions.AddNewEntities;
-import simulation.actions.InitActions;
-import simulation.actions.MakeMove;
+import simulation.actions.Actions;
 import simulation.gameMap.GameMap;
 import simulation.gameMap.GameMapRenderer;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Simulation {
     private int turnCounter = 0;
     private final AtomicBoolean isRunnable = new AtomicBoolean(true);
     private final GameMapRenderer renderer;
-    private final InitActions initActions;
-    private final MakeMove makeMove;
-    private final AddNewEntities addNewEntities;
     private final Menu menu = new Menu(this);
+    private final List<Actions> turnActions;
+    private final List<Actions> initActions;
 
-    public Simulation(GameMap gameMap, InitActions initActions, MakeMove makeMove, AddNewEntities addNewEntities) {
+    public Simulation(GameMap gameMap, List<Actions> initActions, List<Actions> turnActions) {
         this.renderer = new GameMapRenderer(gameMap);
+        this.turnActions = turnActions;
         this.initActions = initActions;
-        this.makeMove = makeMove;
-        this.addNewEntities = addNewEntities;
-    }
-
-    private void commandInput() {
-        menu.showMenu();
-        while (true) {
-            menu.awaitingInput();
-        }
     }
 
     public void simulationStart() {
@@ -47,28 +37,38 @@ public class Simulation {
         System.exit(0);
     }
 
-    private void initActions() {
-        initActions.execute();
+    private void doInitActions() {
+        for (Actions action : initActions){
+            action.execute();
+        }
+    }
+
+    private void doTurnActions(){
+        for(Actions action : turnActions){
+            action.execute();
+        }
     }
 
     private void nextTurn() {
         if (isRunnable.get()) {
             printTurns();
-            addNewEntities.execute();
-            makeMove.execute();
+            doTurnActions();
             actRender();
         }
     }
 
     private void startSimulation() {
-        initActions();
+        doInitActions();
         while (true) {
             nextTurn();
         }
     }
 
     public void execute() {
-        commandInput();
+        menu.showMenu();
+        while (true) {
+            menu.awaitingInput();
+        }
     }
 
     private void simulation() {
