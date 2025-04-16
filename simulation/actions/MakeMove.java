@@ -1,5 +1,6 @@
 package simulation.actions;
 
+import simulation.entity.staticObjects.Grass;
 import simulation.gameMap.Coordinates;
 import simulation.gameMap.GameMap;
 import simulation.entity.creature.Herbivore;
@@ -33,14 +34,14 @@ public class MakeMove extends Actions{
 
     private boolean isHerbivoreMove(){
         return gameMap.isHerbivore(startCoordinates)
-                && gameMap.isContainsId(startCoordinates, id)
-                && gameMap.isContainsGrass();
+                && gameMap.isAlive(startCoordinates, id)
+                && gameMap.isContains(Grass.class);
     }
 
     private boolean isPredatorMove(){
         return gameMap.isPredator(startCoordinates)
-                && gameMap.isContainsId(startCoordinates, id)
-                && gameMap.isContainsHerbivore();
+                && gameMap.isAlive(startCoordinates, id)
+                && gameMap.isContains(Herbivore.class);
     }
 
     private void herbivoreMove(){
@@ -74,21 +75,21 @@ public class MakeMove extends Actions{
 
     private void printHrbMoves(Coordinates newCoordinates) {
         StringBuilder line = new StringBuilder("hrb id:" + id);
-        line.append(", R:").append(startCoordinates.row());
-        line.append(", C:").append(startCoordinates.column());
-        if (!gameMap.isGrass(newCoordinates)) {
+        line.append(", R:").append(startCoordinates.row()+1);
+        line.append(", C:").append(startCoordinates.column()+1);
+        if (gameMap.isGrass(newCoordinates)) {
             line.append(" Eating");
         }
-        line.append(" -> R:").append(newCoordinates.row());
-        line.append(", C:").append(newCoordinates.column());
+        line.append(" -> R:").append(newCoordinates.row()+1);
+        line.append(", C:").append(newCoordinates.column()+1);
         line.append(", HP: ").append(((Herbivore) gameMap.getEntities(startCoordinates)).getHp());
         System.out.println(line);
     }
 
     private void printPrdMoves(Coordinates newCoordinates) {
         StringBuilder line = new StringBuilder("prd id:" + id);
-        line.append(", R:").append(startCoordinates.row());
-        line.append(", C:").append(startCoordinates.column());
+        line.append(", R:").append(startCoordinates.row()+1);
+        line.append(", C:").append(startCoordinates.column()+1);
         if (gameMap.isEmpty(newCoordinates)) {
             line.append(" Damaging -> hrb is dead on");
         } else if (gameMap.isHerbivore(newCoordinates)) {
@@ -96,8 +97,8 @@ public class MakeMove extends Actions{
             line.append(" Damaging -> hrb id:").append(hrb.getId());
             line.append(" HP:").append(hrb.getHp());
         }
-        line.append(" -> R:").append(newCoordinates.row());
-        line.append(", C:").append(newCoordinates.column());
+        line.append(" -> R:").append(newCoordinates.row()+1);
+        line.append(", C:").append(newCoordinates.column()+1);
         System.out.println(line);
     }
 

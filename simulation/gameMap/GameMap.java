@@ -34,12 +34,6 @@ public class GameMap {
         entities.put(coordinates, entity);
     }
 
-    public void setEntitiesOnRandomCoordinates(Entity entity, int count) {
-        for(int i = 0; i < count; i++) {
-            entities.put(getRandomEmptyCoordinates(), entity);
-        }
-    }
-
     public void removeEntities(Coordinates coordinates) {
         if(isEmpty(coordinates)){
             throw new IllegalArgumentException();
@@ -54,17 +48,7 @@ public class GameMap {
         return entities.get(coordinates);
     }
 
-    public int getCountEntity(Entity e){
-        int counter = 0;
-        for(Entity entity : entities.values()){
-            if(e.getClass() == entity.getClass()){
-                counter++;
-            }
-        }
-        return counter;
-    }
-
-    public int getCountEntity1(Class<? extends Entity> clazz){
+    public int getCountEntity(Class<? extends Entity> clazz){
         int counter = 0;
         for(Entity entity : entities.values()){
             if(clazz == entity.getClass()){
@@ -73,7 +57,6 @@ public class GameMap {
         }
         return counter;
     }
-
 
     public boolean isEmpty(Coordinates coordinates) {
         return entities.get(coordinates) == null;
@@ -101,23 +84,15 @@ public class GameMap {
         return !isEmpty(coordinates) && getEntities(coordinates) instanceof Grass;
     }
 
-    public boolean isContains(Entity entity){
-        return entities.containsValue(entity);
+    public boolean isContains(Class<? extends Entity> clazz){
+        return entities.values().stream().anyMatch(value -> value.getClass() == clazz);
     }
 
-    public boolean isContainsId(Coordinates coordinates, int id){
+    public boolean isAlive(Coordinates coordinates, int id){
         if(getEntities(coordinates) instanceof Creature creature){
             return creature.getId() == id;
         }
         return false;
-    }
-
-    public boolean isContainsHerbivore(){
-        return entities.values().stream().anyMatch(value -> value.getClass() == Herbivore.class);
-    }
-
-    public boolean isContainsGrass(){
-        return entities.values().stream().anyMatch(value -> value.getClass() == Grass.class);
     }
 
     public Coordinates getRandomEmptyCoordinates(){

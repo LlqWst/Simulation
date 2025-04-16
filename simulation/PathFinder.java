@@ -8,13 +8,13 @@ import java.util.*;
 
 public class PathFinder {
     private final GameMap gameMap;
-    private final Entity goal;
+    private final Class<? extends Entity> goal;
     private final Coordinates startCoordinates;
 
     private final Queue<Coordinates> coordinatesForVisited = new ArrayDeque<>();
     private final Map<Coordinates, Coordinates> visitedCoordinates = new HashMap<>();
 
-    public PathFinder(Coordinates coordinates, GameMap gameMap, Entity goal) {
+    public PathFinder(Coordinates coordinates, GameMap gameMap, Class<? extends Entity> goal) {
         this.gameMap = gameMap;
         this.goal = goal;
         this.startCoordinates = coordinates;
@@ -93,7 +93,7 @@ public class PathFinder {
     }
 
     private boolean isGoal (Coordinates coordinates){
-        return !gameMap.isEmpty(coordinates) && gameMap.getEntities(coordinates).equals(goal);
+        return !gameMap.isEmpty(coordinates) && gameMap.getEntities(coordinates).getClass() == goal;
     }
 
 }

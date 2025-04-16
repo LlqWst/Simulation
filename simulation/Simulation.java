@@ -51,9 +51,9 @@ public class Simulation {
 
     private void nextTurn() {
         if (isRunnable.get()) {
+            actRender();
             printTurns();
             doTurnActions();
-            actRender();
         }
     }
 
