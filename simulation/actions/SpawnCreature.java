@@ -21,6 +21,7 @@ public class SpawnCreature extends Actions{
         gameMap.setEntities(coordinates, entity);
     }
 
+    @Override
     public void execute(){
         setCreature();
     }

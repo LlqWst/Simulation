@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Herbivore extends Creature{
 
-    private final int hp;
+    private int hp;
 
     public Herbivore() {
         super(parameters.getRandomSpeed(), Grass.class);
@@ -30,6 +30,12 @@ public class Herbivore extends Creature{
         return this.hp;
     }
 
+    public void setHp(int hp){
+        this.hp = hp;
+    }
+
+
+    @Override
     public Coordinates makeMove(Coordinates coordinates, GameMap gameMap){
         List<Coordinates> path = super.findPath(coordinates, gameMap);
         int pathSize = path.size();

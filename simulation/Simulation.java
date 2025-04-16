@@ -54,6 +54,7 @@ public class Simulation {
             actRender();
             printTurns();
             doTurnActions();
+            menu.showShortMenu();
         }
     }
 

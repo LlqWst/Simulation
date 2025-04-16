@@ -1,7 +1,6 @@
 package simulation;
 
 import simulation.entity.Entity;
-import simulation.entity.creature.Creature;
 import simulation.entity.creature.Herbivore;
 import simulation.entity.creature.Predator;
 import simulation.entity.staticObjects.Grass;

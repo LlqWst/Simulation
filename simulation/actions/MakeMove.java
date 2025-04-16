@@ -19,6 +19,7 @@ public class MakeMove extends Actions{
         this.gameMap = gameMap;
     }
 
+    @Override
     public void execute () {
         Map<Coordinates, Integer> creatures = new HashMap<>(gameMap.getCreatures());
         for (Map.Entry<Coordinates, Integer> creature : creatures.entrySet()) {

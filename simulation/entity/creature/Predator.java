@@ -1,6 +1,5 @@
 package simulation.entity.creature;
 
-import simulation.entity.Entity;
 import simulation.gameMap.Coordinates;
 import simulation.gameMap.GameMap;
 
@@ -27,6 +26,7 @@ public class Predator extends Creature {
         return this.damage;
     }
 
+    @Override
     public Coordinates makeMove(Coordinates coordinates, GameMap gameMap){
         List<Coordinates> path = super.findPath(coordinates, gameMap);
         int pathSize = path.size();

@@ -105,4 +105,10 @@ public class Menu {
         System.out.println("["+ EXIT +"]" + "  —  exit Simulation");
         System.out.println("----------------------------------------");
     }
+
+    public void showShortMenu(){
+        System.out.println("---------------------------------------");
+        System.out.println("| " + CONTINUE + " — continue / " + PAUSE + " — pause / " + EXIT + " — exit |");
+        System.out.println("---------------------------------------");
+    }
 }
