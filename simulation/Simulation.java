@@ -1,5 +1,6 @@
 package simulation;
 
+import simulation.menu.Menu;
 import simulation.actions.Actions;
 import simulation.gameMap.GameMap;
 import simulation.gameMap.GameMapRenderer;
@@ -21,6 +22,12 @@ public class Simulation {
         this.initActions = initActions;
     }
 
+    public void execute() {
+        while (true) {
+            menu.start();
+        }
+    }
+
     public void simulationStart() {
         simulation();
     }
@@ -37,14 +44,25 @@ public class Simulation {
         System.exit(0);
     }
 
-    private void doInitActions() {
-        for (Actions action : initActions){
-            action.execute();
-        }
+    private void simulation() {
+        Thread simulationRunnable = new Thread(this::startSimulation);
+        simulationRunnable.setUncaughtExceptionHandler((thread, exception) -> {
+            System.err.println("An exception was caught during simulation " + exception.getMessage());
+            System.exit(1);
+        });
+        simulationRunnable.setDaemon(true);
+        simulationRunnable.start();
     }
 
-    private void doTurnActions(){
-        for(Actions action : turnActions){
+    private void startSimulation() {
+        doInitActions();
+            while (true) {
+                nextTurn();
+            }
+    }
+
+    private void doInitActions() {
+        for (Actions action : initActions){
             action.execute();
         }
     }
@@ -54,32 +72,13 @@ public class Simulation {
             actRender();
             printTurns();
             doTurnActions();
-            menu.showShortMenu();
         }
     }
 
-    private void startSimulation() {
-        doInitActions();
-        while (true) {
-            nextTurn();
+    private void doTurnActions(){
+        for(Actions action : turnActions){
+            action.execute();
         }
-    }
-
-    public void execute() {
-        menu.showMenu();
-        while (true) {
-            menu.awaitingInput();
-        }
-    }
-
-    private void simulation() {
-        Thread simulationRunnable = new Thread(this::startSimulation);
-        simulationRunnable.setUncaughtExceptionHandler((thread, exception) -> {
-            System.err.println("An exception was caught during simulation " + exception.getMessage());
-            System.exit(1);
-        });
-        simulationRunnable.setDaemon(true);
-        simulationRunnable.start();
     }
 
     private void printTurns() {

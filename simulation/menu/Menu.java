@@ -1,5 +1,9 @@
-package simulation;
+package simulation.menu;
 
+import simulation.Simulation;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -26,27 +30,54 @@ public class Menu {
         this.simulationExit = simulation::simulationExit;
     }
 
-    private int parsInt(String line){
-        int input = 0;
-        try {
-            input = Integer.parseInt(line);
-        } catch (IllegalArgumentException e){
-            System.out.println("Incorrect Input");
-        }
-        return input;
+    private String createMenu(){
+        Map<Integer, String> commands = new LinkedHashMap<>();
+        commands.put(START, "start Simulation");
+        commands.put(CONTINUE, "continue Simulation");
+        commands.put(PAUSE, "pause Simulation");
+        commands.put(EXIT, "exit Simulation");
+        return MenuFactory.create(commands);
     }
 
-    public void awaitingInput(){
-        int input = 0;
-        while (input < START || input > EXIT) {
-            String line = scanner.nextLine();
-            input = parsInt(line);
-        }
-        commandSelection(input);
+    public void start(){
+        String menu = createMenu();
+        printMenu(menu);
+        awaitingInput();
     }
 
-    private void commandSelection(int input){
-        if (shouldStarting(input)){
+    private void printMenu(String menu){
+        System.out.println(menu);
+    }
+
+    private void awaitingInput(){
+        while (true) {
+            checkInput();
+        }
+    }
+
+    private void checkInput(){
+        String line = scanner.nextLine();
+        Object answer = ParseIntInput.parse(line, START, EXIT);
+        if(isInputInt(answer)){
+            int input = (int) answer;
+            commandSelection(input);
+        } else {
+            printErrorMessage();
+        }
+    }
+
+    private boolean isInputInt(Object answer){
+        return answer instanceof Integer;
+    }
+
+    private void printErrorMessage(){
+        System.out.println("Incorrect input");
+    }
+
+    private void commandSelection(int input) {
+        if(!isInitInput(input)){
+            printNotInitInput();
+        } else if (shouldStarting(input)){
             commandStart();
         } else if(shouldContinue(input)){
             commandContinue();
@@ -55,6 +86,14 @@ public class Menu {
         } else if(shouldExit(input)){
             commandExit();
         }
+    }
+
+    private void printNotInitInput(){
+        System.out.printf("Enter %s for Start or %s for Exit\n", START, EXIT);
+    }
+
+    private boolean isInitInput(int input){
+        return isStart.get() || input == START;
     }
 
     private void commandStart(){
@@ -96,19 +135,4 @@ public class Menu {
         return input == EXIT;
     }
 
-    public void showMenu(){
-        System.out.println("----------------------------------------");
-        System.out.println("Select one of the commands:");
-        System.out.println("["+ START +"]" + "  —  start Simulation");
-        System.out.println("["+ CONTINUE +"]" + "  —  continue Simulation");
-        System.out.println("["+ PAUSE +"]" + "  —  pause Simulation");
-        System.out.println("["+ EXIT +"]" + "  —  exit Simulation");
-        System.out.println("----------------------------------------");
-    }
-
-    public void showShortMenu(){
-        System.out.println("---------------------------------------");
-        System.out.println("| " + CONTINUE + " — continue / " + PAUSE + " — pause / " + EXIT + " — exit |");
-        System.out.println("---------------------------------------");
-    }
 }

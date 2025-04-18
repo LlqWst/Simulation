@@ -15,25 +15,19 @@ public class Herbivore extends Creature{
         this.hp = parameters.getRandomHp();
     }
 
-    public Herbivore(int speed, int hp) {
-        super(speed, Grass.class);
-        this.hp = hp;
-    }
-
     public Herbivore(int speed, int hp, int id) {
         super(speed, Grass.class);
         this.hp = hp;
         this.id = id;
     }
 
-    public int getHp() {
+    public int getHp() throws NullPointerException{
         return this.hp;
     }
 
     public void setHp(int hp){
         this.hp = hp;
     }
-
 
     @Override
     public Coordinates makeMove(Coordinates coordinates, GameMap gameMap){
@@ -51,5 +45,4 @@ public class Herbivore extends Creature{
     private boolean shouldEat (int rangeToGrass){
         return rangeToGrass == 1;
     }
-
 }

@@ -6,11 +6,11 @@ import simulation.gameMap.GameMap;
 
 import java.util.function.Supplier;
 
-public class SpawnCreature extends Actions{
+public class SpawnEntity extends Actions{
     private final GameMap gameMap;
     private final Supplier<Entity> supplier;
 
-    public SpawnCreature(GameMap gameMap, Supplier<Entity> supplier) {
+    public SpawnEntity(GameMap gameMap, Supplier<Entity> supplier) {
         this.gameMap = gameMap;
         this.supplier = supplier;
     }

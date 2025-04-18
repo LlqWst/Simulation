@@ -8,15 +8,15 @@ public class AddNewEntities extends Actions{
 
    private final GameMap gameMap;
    private final int THRESHOLD;
-   private final SpawnCreature spawnCreature;
+   private final SpawnEntity spawnEntity;
    private final Class<? extends Entity> clazz;
    Parameters parameters;
 
 
-    public AddNewEntities(GameMap gameMap, Parameters parameters, SpawnCreature spawnCreature, Class<? extends Entity> clazz) {
+    public AddNewEntities(GameMap gameMap, Parameters parameters, SpawnEntity spawnEntity, Class<? extends Entity> clazz) {
         this.gameMap = gameMap;
         this.THRESHOLD = Parameters.THRESHOLD_ENTITY;
-        this.spawnCreature = spawnCreature;
+        this.spawnEntity = spawnEntity;
         this.clazz = clazz;
         this.parameters = parameters;
     }
@@ -26,7 +26,7 @@ public class AddNewEntities extends Actions{
         if(count <= THRESHOLD){
             count = parameters.getRandomEntityNumber(clazz);
             for (int i = 0; i < count; i++) {
-                spawnCreature.execute();
+                spawnEntity.execute();
             }
         }
     }

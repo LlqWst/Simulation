@@ -68,9 +68,9 @@ public class MakeMove extends Actions{
     private void predatorDoDamage (Coordinates hrbCoordinates, Predator predator){
         Herbivore hrb = ((Herbivore) gameMap.getEntities(hrbCoordinates));
         int hp = hrb.getHp() - predator.doDamage();
-        gameMap.removeEntities(hrbCoordinates);
-        if (hp > 0) {
-            gameMap.setEntities(hrbCoordinates, new Herbivore(hrb.getSpeed(), hp, hrb.getId()));
+        hrb.setHp(hp);
+        if (hp < 0) {
+            gameMap.removeEntities(hrbCoordinates);
         }
     }
 
