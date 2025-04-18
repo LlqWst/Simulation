@@ -45,4 +45,5 @@ public class Herbivore extends Creature{
     private boolean shouldEat (int rangeToGrass){
         return rangeToGrass == 1;
     }
+
 }

@@ -7,12 +7,13 @@ import simulation.gameMap.GameMap;
 
 import java.util.List;
 
-
 public class Main {
     public static void main(String[] args){
         Parameters parameters = new Parameters();
         GameMap gameMap = new GameMap();
-        MakeMove makeMove = new MakeMove(gameMap);
+        PrintMoves printMoves = new PrintMoves(gameMap);
+        CreatureAction creatureAction = new CreatureAction(gameMap, printMoves);
+        MakeMove makeMove = new MakeMove(gameMap, creatureAction);
         List<Actions> initActions = List.of(
                 new AddNewEntities(gameMap, parameters, new SpawnEntity(gameMap, Herbivore::new), Herbivore.class),
                 new AddNewEntities(gameMap, parameters, new SpawnEntity(gameMap, Predator::new), Predator.class),

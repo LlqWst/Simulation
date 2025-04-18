@@ -35,7 +35,7 @@ public class GameMapRenderer {
             return EMOJI_EARTH;
         }
 
-        return switch (gameMap.getEntities(coordinates).getClass().getSimpleName()) {
+        return switch (gameMap.getEntity(coordinates).getClass().getSimpleName()) {
             case "Herbivore" -> EMOJI_HERBIVORE;
             case "Predator" -> EMOJI_PREDATOR;
             case "Grass" -> EMOJI_GRASS;

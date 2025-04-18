@@ -18,7 +18,7 @@ public class SpawnEntity extends Actions{
     private void setCreature(){
         Entity entity = supplier.get();
         Coordinates coordinates = gameMap.getRandomEmptyCoordinates();
-        gameMap.setEntities(coordinates, entity);
+        gameMap.setEntity(coordinates, entity);
     }
 
     @Override

@@ -24,8 +24,8 @@ public abstract class Creature extends Entity {
         return this.id;
     }
 
-    public int getSpeed() throws NullPointerException {
-        return this.speed;
+    public Class<? extends Entity> getGoal() throws NullPointerException {
+        return this.goal;
     }
 
     abstract public Coordinates makeMove(Coordinates coordinates, GameMap gameMap);

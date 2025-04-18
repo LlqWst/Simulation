@@ -5,6 +5,7 @@ import simulation.entity.creature.*;
 import simulation.entity.staticObjects.Grass;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameMap {
 
@@ -30,18 +31,18 @@ public class GameMap {
         return MAX_COLUMN;
     }
 
-    public void setEntities(Coordinates coordinates, Entity entity) {
+    public void setEntity(Coordinates coordinates, Entity entity) {
         entities.put(coordinates, entity);
     }
 
-    public void removeEntities(Coordinates coordinates) {
+    public void removeEntity(Coordinates coordinates) {
         if(isEmpty(coordinates)){
             throw new IllegalArgumentException();
         }
         entities.remove(coordinates);
     }
 
-    public Entity getEntities(Coordinates coordinates) {
+    public Entity getEntity(Coordinates coordinates) {
         if(isEmpty(coordinates)){
             throw new IllegalArgumentException();
         }
@@ -62,26 +63,15 @@ public class GameMap {
         return entities.get(coordinates) == null;
     }
 
-    public Map<Coordinates, Integer> getCreatures(){
-        Map<Coordinates, Integer> creatures = new HashMap<>();
-        for(Map.Entry<Coordinates, Entity> entity : entities.entrySet()){
-            if(entity.getValue() instanceof Creature cr){
-                creatures.put(entity.getKey(), cr.getId());
-            }
-        }
-        return creatures;
+    public List<Coordinates> getCreatures() {
+        return entities.entrySet().stream()
+                .filter(entry -> entry.getValue() instanceof Creature)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
     }
 
-    public boolean isHerbivore(Coordinates coordinates){
-        return !isEmpty(coordinates) && getEntities(coordinates) instanceof Herbivore;
-    }
-
-    public boolean isPredator(Coordinates coordinates){
-        return !isEmpty(coordinates) && getEntities(coordinates) instanceof Predator;
-    }
-
-    public boolean isGrass(Coordinates coordinates){
-        return !isEmpty(coordinates) && getEntities(coordinates) instanceof Grass;
+    public boolean isCoordinatesContain(Coordinates coordinates, Class<? extends Entity> clazz){
+        return !isEmpty(coordinates) && getEntity(coordinates).getClass() == clazz;
     }
 
     public boolean isContains(Class<? extends Entity> clazz){
@@ -89,7 +79,7 @@ public class GameMap {
     }
 
     public boolean isAlive(Coordinates coordinates, int id){
-        if(getEntities(coordinates) instanceof Creature creature){
+        if(getEntity(coordinates) instanceof Creature creature){
             return creature.getId() == id;
         }
         return false;

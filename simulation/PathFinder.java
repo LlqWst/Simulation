@@ -98,7 +98,8 @@ public class PathFinder {
     }
 
     private boolean isGoal (Coordinates coordinates){
-        return !gameMap.isEmpty(coordinates) && gameMap.getEntities(coordinates).getClass() == goal;
+        return gameMap.isCoordinatesContain(coordinates, goal);
+        //return !gameMap.isEmpty(coordinates) && gameMap.getEntity(coordinates).getClass() == goal;
     }
 
 }

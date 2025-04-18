@@ -46,10 +46,10 @@ public class Simulation {
 
     private void simulation() {
         Thread simulationRunnable = new Thread(this::startSimulation);
-        simulationRunnable.setUncaughtExceptionHandler((thread, exception) -> {
-            System.err.println("An exception was caught during simulation " + exception.getMessage());
-            System.exit(1);
-        });
+//        simulationRunnable.setUncaughtExceptionHandler((thread, exception) -> {
+//            System.err.println("An exception was caught during simulation " + exception.getMessage());
+//            System.exit(1);
+//        });
         simulationRunnable.setDaemon(true);
         simulationRunnable.start();
     }
@@ -88,7 +88,7 @@ public class Simulation {
     private void actRender() {
         renderer.render();
         try {
-            Thread.sleep(1200);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

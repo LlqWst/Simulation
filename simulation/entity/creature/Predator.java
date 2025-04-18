@@ -41,7 +41,7 @@ public class Predator extends Creature {
         }
     }
 
-    public boolean shouldDoDamage(Coordinates coordinates, GameMap gameMap){
-        return gameMap.isHerbivore(coordinates);
+    public boolean canDamage(Coordinates coordinates, GameMap gameMap){
+        return gameMap.isCoordinatesContain(coordinates, goal);
     }
 }
