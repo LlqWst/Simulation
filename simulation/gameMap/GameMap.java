@@ -2,10 +2,8 @@ package simulation.gameMap;
 
 import simulation.entity.*;
 import simulation.entity.creature.*;
-import simulation.entity.staticObjects.Grass;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class GameMap {
 
@@ -63,11 +61,14 @@ public class GameMap {
         return entities.get(coordinates) == null;
     }
 
-    public List<Coordinates> getCreatures() {
-        return entities.entrySet().stream()
-                .filter(entry -> entry.getValue() instanceof Creature)
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+    public HashMap<Coordinates, Creature> getCreatures() {
+        HashMap<Coordinates, Creature> creatures = new HashMap<>();
+        for (Map.Entry<Coordinates, Entity> entry : entities.entrySet()){
+            if(entry.getValue() instanceof Creature creature){
+                creatures.put(entry.getKey(), creature);
+            }
+        }
+        return creatures;
     }
 
     public boolean isCoordinatesContain(Coordinates coordinates, Class<? extends Entity> clazz){

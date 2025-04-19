@@ -4,7 +4,7 @@ import java.util.Map;
 
 class MenuFactory {
 
-    private static final String MENU_LINE = "-------------------MENU-----------------";
+    private static final String MENU_LINE = "-----------------MENU-------------------";
     private static final String BORDER = "----------------------------------------";
 
     public static String create(Map<Integer, String> commands){

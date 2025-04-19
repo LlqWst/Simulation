@@ -9,6 +9,7 @@ import java.util.List;
 public class Herbivore extends Creature{
 
     private int hp;
+    private static final int RANGE_TO_EAT = 1;
 
     public Herbivore() {
         super(parameters.getRandomSpeed(), Grass.class);
@@ -43,7 +44,10 @@ public class Herbivore extends Creature{
     }
 
     private boolean shouldEat (int rangeToGrass){
-        return rangeToGrass == 1;
+        return rangeToGrass == RANGE_TO_EAT;
     }
 
+    public boolean canEat(Coordinates coordinates, GameMap gameMap){
+        return gameMap.isCoordinatesContain(coordinates, goal);
+    }
 }

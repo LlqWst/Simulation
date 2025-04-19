@@ -22,7 +22,7 @@ public class Predator extends Creature {
         this.range = range;
     }
 
-    public int doDamage() throws NullPointerException{
+    public int getDamage() throws NullPointerException{
         return this.damage;
     }
 
