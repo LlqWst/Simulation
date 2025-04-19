@@ -2,7 +2,7 @@ package simulation.menu;
 
 class ParseIntInput {
     public static Object parse(String line, int min, int max) {
-        int input = 0;
+        int input;
         try {
             input = Integer.parseInt(line);
         } catch (IllegalArgumentException e) {
