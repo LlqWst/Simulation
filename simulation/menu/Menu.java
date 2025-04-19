@@ -30,7 +30,7 @@ public class Menu {
         this.simulationExit = simulation::simulationExit;
     }
 
-    private String createMenu(){
+    private String createMenu() {
         Map<Integer, String> commands = new LinkedHashMap<>();
         commands.put(START, "start Simulation");
         commands.put(CONTINUE, "continue Simulation");
@@ -39,26 +39,26 @@ public class Menu {
         return MenuFactory.create(commands);
     }
 
-    public void start(){
+    public void start() {
         String menu = createMenu();
         printMenu(menu);
         awaitingInput();
     }
 
-    private void printMenu(String menu){
+    private void printMenu(String menu) {
         System.out.println(menu);
     }
 
-    private void awaitingInput(){
+    private void awaitingInput() {
         while (true) {
             checkInput();
         }
     }
 
-    private void checkInput(){
+    private void checkInput() {
         String line = scanner.nextLine();
         Object answer = ParseIntInput.parse(line, START, EXIT);
-        if(isInputInt(answer)){
+        if (isInputInt(answer)) {
             int input = (int) answer;
             commandSelection(input);
         } else {
@@ -66,72 +66,72 @@ public class Menu {
         }
     }
 
-    private boolean isInputInt(Object answer){
+    private boolean isInputInt(Object answer) {
         return answer instanceof Integer;
     }
 
-    private void printErrorMessage(){
+    private void printErrorMessage() {
         System.out.println("Incorrect input");
     }
 
     private void commandSelection(int input) {
-        if(!isInitInput(input)){
+        if (!isInitInput(input)) {
             printNotInitInput();
-        } else if (shouldStarting(input)){
+        } else if (shouldStarting(input)) {
             commandStart();
-        } else if(shouldContinue(input)){
+        } else if (shouldContinue(input)) {
             commandContinue();
-        } else if(shouldPause(input)){
+        } else if (shouldPause(input)) {
             commandPause();
-        } else if(shouldExit(input)){
+        } else if (shouldExit(input)) {
             commandExit();
         }
     }
 
-    private void printNotInitInput(){
+    private void printNotInitInput() {
         System.out.printf("Enter %s for Start or %s for Exit\n", START, EXIT);
     }
 
-    private boolean isInitInput(int input){
-        return isStart.get() || input == START;
+    private boolean isInitInput(int input) {
+        return isStart.get() || input == START || input == EXIT;
     }
 
-    private void commandStart(){
+    private void commandStart() {
         isStart.set(true);
         System.out.println("Simulation is starting");
         simulationStart.run();
     }
 
-    private void commandContinue(){
+    private void commandContinue() {
         isRunnable.set(true);
         System.out.println("Simulation is continue");
         simulationContinue.run();
     }
 
-    private void commandPause(){
+    private void commandPause() {
         isRunnable.set(false);
         System.out.println("Simulation on pause");
         simulationPause.run();
     }
 
-    private void commandExit(){
+    private void commandExit() {
         System.out.println("Simulation is over");
         simulationExit.run();
     }
 
-    private boolean shouldStarting(int input){
+    private boolean shouldStarting(int input) {
         return input == START && !isStart.get();
     }
 
-    private boolean shouldContinue(int input){
+    private boolean shouldContinue(int input) {
         return input == CONTINUE && isStart.get() && !isRunnable.get();
     }
 
-    private boolean shouldPause(int input){
+    private boolean shouldPause(int input) {
         return input == PAUSE && isStart.get() && isRunnable.get();
     }
 
-    private boolean shouldExit(int input){
+    private boolean shouldExit(int input) {
         return input == EXIT;
     }
 

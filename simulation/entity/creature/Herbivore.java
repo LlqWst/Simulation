@@ -6,7 +6,7 @@ import simulation.entity.staticObjects.Grass;
 
 import java.util.List;
 
-public class Herbivore extends Creature{
+public class Herbivore extends Creature {
 
     private int hp;
     private static final int RANGE_TO_EAT = 1;
@@ -22,32 +22,32 @@ public class Herbivore extends Creature{
         this.id = id;
     }
 
-    public int getHp() throws NullPointerException{
+    public int getHp() throws NullPointerException {
         return this.hp;
     }
 
-    public void setHp(int hp){
+    public void setHp(int hp) {
         this.hp = hp;
     }
 
     @Override
-    public Coordinates makeMove(Coordinates coordinates, GameMap gameMap){
+    public Coordinates makeMove(Coordinates coordinates, GameMap gameMap) {
         List<Coordinates> path = super.findPath(coordinates, gameMap);
         int pathSize = path.size();
-        if(shouldEat(pathSize) || path.getFirst() == coordinates){
+        if (shouldEat(pathSize) || path.getFirst() == coordinates) {
             return path.getFirst();
-        } else if(pathSize > speed){
+        } else if (pathSize > speed) {
             return path.get(speed - 1);
         } else {
             return path.get(pathSize - 2);
         }
     }
 
-    private boolean shouldEat (int rangeToGrass){
+    private boolean shouldEat(int rangeToGrass) {
         return rangeToGrass == RANGE_TO_EAT;
     }
 
-    public boolean canEat(Coordinates coordinates, GameMap gameMap){
+    public boolean canEat(Coordinates coordinates, GameMap gameMap) {
         return gameMap.isCoordinatesContain(coordinates, goal);
     }
 }

@@ -31,43 +31,43 @@ public class Parameters {
     private static final int MIN_DAMAGE = 2;
     public static final int THRESHOLD_ENTITY = 2;
 
-    public int getRandomDamage(){
+    public int getRandomDamage() {
         return random.nextInt(MIN_DAMAGE, MAX_DAMAGE);
     }
 
-    public int getRandomHp(){
+    public int getRandomHp() {
         return random.nextInt(MIN_HP, MAX_HP);
     }
 
-    public int getRandomSpeed(){
+    public int getRandomSpeed() {
         return random.nextInt(MIN_SPEED, MAX_SPEED);
     }
 
-    public int getRandomRange(){
+    public int getRandomRange() {
         return random.nextInt(MIN_RANGE, MAX_RANGE);
     }
 
-    public int getRandomHerbivoreNumber(){
+    public int getRandomHerbivoreNumber() {
         return random.nextInt(MIN_HERBIVORE, MAX_HERBIVORE);
     }
 
-    public int getRandomPredatorNumber(){
+    public int getRandomPredatorNumber() {
         return random.nextInt(MIN_PREDATOR, MAX_PREDATOR);
     }
 
-    public int getRandomGrassNumber(){
+    public int getRandomGrassNumber() {
         return random.nextInt(MIN_GRASS, MAX_GRASS);
     }
 
-    public int getRandomTreeNumber(){
+    public int getRandomTreeNumber() {
         return random.nextInt(MIN_TREE, MAX_TREE);
     }
 
-    public int getRandomRockNumber(){
+    public int getRandomRockNumber() {
         return random.nextInt(MIN_ROCK, MAX_ROCK);
     }
 
-    public int getRandomEntityNumber(Class<? extends Entity> clazz){
+    public int getRandomEntityNumber(Class<? extends Entity> clazz) {
         if (clazz == Grass.class) return getRandomGrassNumber();
         else if (clazz == Herbivore.class) return getRandomHerbivoreNumber();
         else if (clazz == Rock.class) return getRandomRockNumber();

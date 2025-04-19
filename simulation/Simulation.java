@@ -23,61 +23,79 @@ public class Simulation {
     }
 
     public void execute() {
-        while (true) {
-            menu.start();
-        }
+        menu.start();
     }
 
     public void simulationStart() {
-        simulation();
+        start();
     }
 
     public void simulationContinue() {
-        isRunnable.set(true);
+        synchronized (this) {
+            isRunnable.set(true);
+            this.notifyAll();
+        }
     }
 
     public void simulationPause() {
-        isRunnable.set(false);
+        synchronized (this) {
+            isRunnable.set(false);
+        }
     }
 
     public void simulationExit() {
         System.exit(0);
     }
 
-    private void simulation() {
-        Thread simulationRunnable = new Thread(this::startSimulation);
-//        simulationRunnable.setUncaughtExceptionHandler((thread, exception) -> {
-//            System.err.println("An exception was caught during simulation " + exception.getMessage());
-//            System.exit(1);
-//        });
+    private void start() {
+        Thread simulationRunnable = new Thread(this::simulation);
+        simulationRunnable.setUncaughtExceptionHandler((thread, exception) -> {
+            System.err.println("An exception was caught during simulation ");
+            exception.printStackTrace();
+            System.exit(1);
+        });
         simulationRunnable.setDaemon(true);
         simulationRunnable.start();
     }
 
-    private void startSimulation() {
+    private void simulation() {
         doInitActions();
-            while (true) {
-                nextTurn();
-            }
+        while (true) {
+            simulationStatus();
+            nextTurn();
+        }
     }
 
     private void doInitActions() {
-        for (Actions action : initActions){
+        for (Actions action : initActions) {
             action.execute();
+        }
+    }
+
+    private void simulationStatus() {
+        synchronized (this) {
+            try {
+                while (!isRunnable.get()) {
+                    this.wait();
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
     private void nextTurn() {
-        if (isRunnable.get()) {
-            actRender();
-            printTurns();
-            doTurnActions();
-        }
+        actRender();
+        printTurns();
+        doTurnActions();
     }
 
-    private void doTurnActions(){
-        for(Actions action : turnActions){
-            action.execute();
+    private void actRender() {
+        renderer.render();
+        try {
+            Thread.sleep(1200);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -85,12 +103,10 @@ public class Simulation {
         System.out.println("Turn:" + ++turnCounter);
     }
 
-    private void actRender() {
-        renderer.render();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+    private void doTurnActions() {
+        for (Actions action : turnActions) {
+            action.execute();
         }
     }
+
 }

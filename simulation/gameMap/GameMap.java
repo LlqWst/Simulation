@@ -34,23 +34,23 @@ public class GameMap {
     }
 
     public void removeEntity(Coordinates coordinates) {
-        if(isEmpty(coordinates)){
+        if (isEmpty(coordinates)) {
             throw new IllegalArgumentException();
         }
         entities.remove(coordinates);
     }
 
     public Entity getEntity(Coordinates coordinates) {
-        if(isEmpty(coordinates)){
+        if (isEmpty(coordinates)) {
             throw new IllegalArgumentException();
         }
         return entities.get(coordinates);
     }
 
-    public int getCountEntity(Class<? extends Entity> clazz){
+    public int getCountEntity(Class<? extends Entity> clazz) {
         int counter = 0;
-        for(Entity entity : entities.values()){
-            if(clazz == entity.getClass()){
+        for (Entity entity : entities.values()) {
+            if (clazz == entity.getClass()) {
                 counter++;
             }
         }
@@ -63,35 +63,35 @@ public class GameMap {
 
     public HashMap<Coordinates, Creature> getCreatures() {
         HashMap<Coordinates, Creature> creatures = new HashMap<>();
-        for (Map.Entry<Coordinates, Entity> entry : entities.entrySet()){
-            if(entry.getValue() instanceof Creature creature){
+        for (Map.Entry<Coordinates, Entity> entry : entities.entrySet()) {
+            if (entry.getValue() instanceof Creature creature) {
                 creatures.put(entry.getKey(), creature);
             }
         }
         return creatures;
     }
 
-    public boolean isCoordinatesContain(Coordinates coordinates, Class<? extends Entity> clazz){
+    public boolean isCoordinatesContain(Coordinates coordinates, Class<? extends Entity> clazz) {
         return !isEmpty(coordinates) && getEntity(coordinates).getClass() == clazz;
     }
 
-    public boolean isContains(Class<? extends Entity> clazz){
+    public boolean isContains(Class<? extends Entity> clazz) {
         return entities.values().stream().anyMatch(value -> value.getClass() == clazz);
     }
 
-    public boolean isAlive(Coordinates coordinates, int id){
-        if(getEntity(coordinates) instanceof Creature creature){
+    public boolean isAlive(Coordinates coordinates, int id) {
+        if (getEntity(coordinates) instanceof Creature creature) {
             return creature.getId() == id;
         }
         return false;
     }
 
-    public Coordinates getRandomEmptyCoordinates(){
+    public Coordinates getRandomEmptyCoordinates() {
         List<Coordinates> allEmptyCoordinates = new ArrayList<>();
         for (int row = 0; row < getMaxRow(); row++) {
             for (int column = 0; column < getMaxColumn(); column++) {
-                Coordinates coordinates = new Coordinates (row, column);
-                if (isEmpty(coordinates)){
+                Coordinates coordinates = new Coordinates(row, column);
+                if (isEmpty(coordinates)) {
                     allEmptyCoordinates.add(coordinates);
                 }
             }

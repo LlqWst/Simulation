@@ -6,7 +6,7 @@ import simulation.gameMap.GameMap;
 
 import java.util.function.Supplier;
 
-public class SpawnEntity extends Actions{
+public class SpawnEntity extends Actions {
     private final GameMap gameMap;
     private final Supplier<Entity> supplier;
 
@@ -15,14 +15,14 @@ public class SpawnEntity extends Actions{
         this.supplier = supplier;
     }
 
-    private void setCreature(){
+    private void setCreature() {
         Entity entity = supplier.get();
         Coordinates coordinates = gameMap.getRandomEmptyCoordinates();
         gameMap.setEntity(coordinates, entity);
     }
 
     @Override
-    public void execute(){
+    public void execute() {
         setCreature();
     }
 }

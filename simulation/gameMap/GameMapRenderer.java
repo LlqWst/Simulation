@@ -17,7 +17,7 @@ public class GameMapRenderer {
         this.gameMap = gameMap;
     }
 
-    public void render(){
+    public void render() {
         System.out.println();
         for (int row = 0; row < gameMap.getMaxRow(); row++) {
             StringBuilder line = new StringBuilder();
@@ -29,9 +29,9 @@ public class GameMapRenderer {
         }
     }
 
-    public String entitySprite(Coordinates coordinates){
+    public String entitySprite(Coordinates coordinates) {
 
-        if(gameMap.isEmpty(coordinates)){
+        if (gameMap.isEmpty(coordinates)) {
             return EMOJI_EARTH;
         }
 

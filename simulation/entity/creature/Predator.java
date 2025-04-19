@@ -22,26 +22,26 @@ public class Predator extends Creature {
         this.range = range;
     }
 
-    public int getDamage() throws NullPointerException{
+    public int getDamage() throws NullPointerException {
         return this.damage;
     }
 
     @Override
-    public Coordinates makeMove(Coordinates coordinates, GameMap gameMap){
+    public Coordinates makeMove(Coordinates coordinates, GameMap gameMap) {
         List<Coordinates> path = super.findPath(coordinates, gameMap);
         int pathSize = path.size();
-        if(path.getFirst() == coordinates){
+        if (path.getFirst() == coordinates) {
             return path.getFirst();
         } else if (range >= pathSize) {
             return path.getLast();
-        } else if(pathSize > speed){
+        } else if (pathSize > speed) {
             return path.get(speed - 1);
         } else {
             return path.get(pathSize - 2);
         }
     }
 
-    public boolean canDamage(Coordinates coordinates, GameMap gameMap){
+    public boolean canDamage(Coordinates coordinates, GameMap gameMap) {
         return gameMap.isCoordinatesContain(coordinates, goal);
     }
 }

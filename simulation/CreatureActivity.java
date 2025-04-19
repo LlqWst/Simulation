@@ -1,4 +1,4 @@
-package simulation.actions;
+package simulation;
 
 import simulation.entity.creature.Herbivore;
 import simulation.entity.creature.Predator;
@@ -12,12 +12,12 @@ public class CreatureActivity {
         this.gameMap = gameMap;
     }
 
-    public void doEat(Coordinates startCoordinates, Coordinates nextMove, Herbivore herbivore){
+    public void doEat(Coordinates startCoordinates, Coordinates nextMove, Herbivore herbivore) {
         gameMap.removeEntity(startCoordinates);
         gameMap.setEntity(nextMove, herbivore);
     }
 
-    public void doDamage(Coordinates hrbCoordinates, Predator predator){
+    public void doDamage(Coordinates hrbCoordinates, Predator predator) {
         Herbivore hrb = ((Herbivore) gameMap.getEntity(hrbCoordinates));
         int hp = hrb.getHp() - predator.getDamage();
         hrb.setHp(hp);
@@ -26,7 +26,7 @@ public class CreatureActivity {
         }
     }
 
-    private boolean isDead(int hp){
+    private boolean isDead(int hp) {
         return hp <= 0;
     }
 }

@@ -8,7 +8,7 @@ import simulation.gameMap.GameMap;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Parameters parameters = new Parameters();
         GameMap gameMap = new GameMap();
         PrintMoves printMoves = new PrintMoves(gameMap);
