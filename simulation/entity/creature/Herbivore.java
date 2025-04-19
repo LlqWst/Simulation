@@ -9,7 +9,6 @@ import java.util.List;
 public class Herbivore extends Creature {
 
     private int hp;
-    private static final int RANGE_TO_EAT = 1;
 
     public Herbivore() {
         super(parameters.getRandomSpeed(), Grass.class);
@@ -34,17 +33,17 @@ public class Herbivore extends Creature {
     public Coordinates makeMove(Coordinates coordinates, GameMap gameMap) {
         List<Coordinates> path = super.findPath(coordinates, gameMap);
         int pathSize = path.size();
-        if (shouldEat(pathSize) || path.getFirst() == coordinates) {
+        if (shouldEat(pathSize) || isNoGoal(path, coordinates)) {
             return path.getFirst();
         } else if (pathSize > speed) {
-            return path.get(speed - 1);
+            return path.get(speed - TURN_TO_INDEX);
         } else {
-            return path.get(pathSize - 2);
+            return path.get(pathSize - TURN_TO_INDEX - RANGE_TO_GOAL);
         }
     }
 
     private boolean shouldEat(int rangeToGrass) {
-        return rangeToGrass == RANGE_TO_EAT;
+        return rangeToGrass == RANGE_TO_GOAL;
     }
 
     public boolean canEat(Coordinates coordinates, GameMap gameMap) {
