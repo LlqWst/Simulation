@@ -40,7 +40,7 @@ public class PrintMoves {
             Herbivore hrb = ((Herbivore) gameMap.getEntity(newCoordinates));
             int hrbId = hrb.getId();
             int hrbHp = hrb.getHp();
-            line.append(String.format(" Damaging -> hrb id:%d, HP:%d", hrbId, hrbHp));
+            line.append(String.format(" Damaging hrb id:%d, HP:%d", hrbId, hrbHp));
         }
         line.append(String.format(" -> (R:%d, C:%d)", newCoordinates.row() + 1, newCoordinates.column() + 1));
         System.out.println(line);

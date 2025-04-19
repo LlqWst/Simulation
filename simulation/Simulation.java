@@ -100,7 +100,7 @@ public class Simulation {
     }
 
     private void printTurns() {
-        System.out.println("Turn:" + ++turnCounter);
+        System.out.printf("== Turn: %d ==\n", ++turnCounter);
     }
 
     private void doTurnActions() {
