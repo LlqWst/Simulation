@@ -1,10 +1,11 @@
-package simulation;
+package simulation.handler;
 
 import simulation.entity.Entity;
+import simulation.entity.creature.Creature;
 import simulation.entity.creature.Herbivore;
 import simulation.entity.creature.Predator;
-import simulation.gameMap.Coordinates;
-import simulation.gameMap.GameMap;
+import simulation.gamemap.Coordinates;
+import simulation.gamemap.GameMap;
 
 public class PrintMoves {
 
@@ -14,11 +15,19 @@ public class PrintMoves {
         this.gameMap = gameMap;
     }
 
+
+    public void printAll(Creature creature, Coordinates startCoordinates, Coordinates newCoordinates) {
+        if (creature instanceof Herbivore herbivore) {
+            print(herbivore, startCoordinates, newCoordinates);
+        } else if (creature instanceof Predator predator) {
+            print(predator, startCoordinates, newCoordinates);
+        }
+    }
+
     public void print(Herbivore herbivore, Coordinates startCoordinates, Coordinates newCoordinates) {
-        int id = herbivore.getId();
         int hp = herbivore.getHp();
-        StringBuilder line = new StringBuilder(String.format("hrb id:%d", id));
-        line.append(String.format(", (R:%d, C:%d)", startCoordinates.row() + 1, startCoordinates.column() + 1));
+        StringBuilder line = new StringBuilder(String.format("hrb (R:%d, C:%d)", startCoordinates.row() + 1, startCoordinates.column() + 1));
+
         if (hasGetGoal(newCoordinates, herbivore.getGoal())) {
             line.append(" Eating");
         }
@@ -27,20 +36,17 @@ public class PrintMoves {
     }
 
     private boolean hasGetGoal(Coordinates coordinates, Class<? extends Entity> clazz) {
-        return gameMap.isCoordinatesContain(coordinates, clazz);
+        return gameMap.isCoordinatesContains(coordinates, clazz);
     }
 
     public void print(Predator predator, Coordinates startCoordinates, Coordinates newCoordinates) {
-        int prdId = predator.getId();
-        StringBuilder line = new StringBuilder(String.format("prd id:%d", prdId));
-        line.append(String.format(", (R:%d, C:%d)", startCoordinates.row() + 1, startCoordinates.column() + 1));
+        StringBuilder line = new StringBuilder((String.format("prd (R:%d, C:%d), dmg:%d", startCoordinates.row() + 1, startCoordinates.column() + 1, predator.getDamage())));
         if (isDead(newCoordinates)) {
             line.append(" Damaging, hrb is dead on");
         } else if (hasGetGoal(newCoordinates, predator.getGoal())) {
             Herbivore hrb = ((Herbivore) gameMap.getEntity(newCoordinates));
-            int hrbId = hrb.getId();
             int hrbHp = hrb.getHp();
-            line.append(String.format(" Damaging hrb id:%d, HP:%d", hrbId, hrbHp));
+            line.append(String.format(" Damaging hrb, HP:%d", hrbHp));
         }
         line.append(String.format(" -> (R:%d, C:%d)", newCoordinates.row() + 1, newCoordinates.column() + 1));
         System.out.println(line);

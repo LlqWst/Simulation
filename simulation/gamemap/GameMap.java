@@ -1,4 +1,4 @@
-package simulation.gameMap;
+package simulation.gamemap;
 
 import simulation.entity.*;
 import simulation.entity.creature.*;
@@ -30,21 +30,41 @@ public class GameMap {
     }
 
     public void setEntity(Coordinates coordinates, Entity entity) {
-        entities.put(coordinates, entity);
+        if(entity == null){
+            throw new IllegalArgumentException();
+        }
+        if(isValidCoordinate(coordinates)) {
+            entities.put(coordinates, entity);
+        }
     }
 
     public void removeEntity(Coordinates coordinates) {
-        if (isEmpty(coordinates)) {
-            throw new IllegalArgumentException();
+        if (!isEmpty(coordinates) && isValidCoordinate(coordinates)) {
+            entities.remove(coordinates);
         }
-        entities.remove(coordinates);
+    }
+
+    public List<Coordinates> getEntitiesCoordinates(Class<? extends Entity> clazz){
+        List<Coordinates> searchedEntities = new ArrayList<>();
+        for (Map.Entry<Coordinates, Entity> entry : entities.entrySet()) {
+            if (entry.getValue().getClass() == clazz) {
+                searchedEntities.add(entry.getKey());
+            }
+        }
+        return searchedEntities;
+    }
+
+    public boolean isValidCoordinate(Coordinates coordinates){
+        return coordinates.row() >= 0
+                && coordinates.column() >= 0
+                && coordinates.row() <= getMaxRow() - 1
+                && coordinates.column() <= getMaxColumn() - 1;
     }
 
     public Entity getEntity(Coordinates coordinates) {
-        if (isEmpty(coordinates)) {
-            throw new IllegalArgumentException();
-        }
-        return entities.get(coordinates);
+        if (!isEmpty(coordinates) && isValidCoordinate(coordinates)) {
+            return entities.get(coordinates);
+        } else throw new IllegalArgumentException();
     }
 
     public int getCountEntity(Class<? extends Entity> clazz) {
@@ -58,7 +78,8 @@ public class GameMap {
     }
 
     public boolean isEmpty(Coordinates coordinates) {
-        return entities.get(coordinates) == null;
+        return isValidCoordinate(coordinates)
+                && entities.get(coordinates) == null;
     }
 
     public HashMap<Coordinates, Creature> getCreatures() {
@@ -71,19 +92,21 @@ public class GameMap {
         return creatures;
     }
 
-    public boolean isCoordinatesContain(Coordinates coordinates, Class<? extends Entity> clazz) {
-        return !isEmpty(coordinates) && getEntity(coordinates).getClass() == clazz;
+    public boolean isCoordinatesContains(Coordinates coordinates, Class<? extends Entity> clazz) {
+        return isValidCoordinate(coordinates)
+                && !isEmpty(coordinates)
+                && getEntity(coordinates).getClass() == clazz;
     }
 
     public boolean isContains(Class<? extends Entity> clazz) {
         return entities.values().stream().anyMatch(value -> value.getClass() == clazz);
     }
 
-    public boolean isAlive(Coordinates coordinates, int id) {
-        if (getEntity(coordinates) instanceof Creature creature) {
-            return creature.getId() == id;
+    public boolean isAlive(Entity entity) {
+        if (entity == null){
+            throw new IllegalArgumentException();
         }
-        return false;
+        return entities.containsValue(entity);
     }
 
     public Coordinates getRandomEmptyCoordinates() {

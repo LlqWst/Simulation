@@ -2,8 +2,8 @@ package simulation;
 
 import simulation.menu.Menu;
 import simulation.actions.Actions;
-import simulation.gameMap.GameMap;
-import simulation.gameMap.GameMapRenderer;
+import simulation.gamemap.GameMap;
+import simulation.gamemap.GameMapRenderer;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -93,7 +93,7 @@ public class Simulation {
     private void actRender() {
         renderer.render();
         try {
-            Thread.sleep(1200);
+            Thread.sleep(0);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

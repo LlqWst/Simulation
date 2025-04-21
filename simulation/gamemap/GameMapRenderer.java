@@ -1,4 +1,4 @@
-package simulation.gameMap;
+package simulation.gamemap;
 
 public class GameMapRenderer {
 

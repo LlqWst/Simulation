@@ -1,24 +1,21 @@
 package simulation.entity.creature;
 
-import simulation.gameMap.Coordinates;
-import simulation.gameMap.GameMap;
-import simulation.entity.staticObjects.Grass;
+import simulation.PathFinder;
+import simulation.gamemap.Coordinates;
+import simulation.gamemap.GameMap;
+import simulation.entity.static_objects.Grass;
 
 import java.util.List;
 
 public class Herbivore extends Creature {
 
     private int hp;
+    private final int eatRange;
 
-    public Herbivore() {
-        super(parameters.getRandomSpeed(), Grass.class);
-        this.hp = parameters.getRandomHp();
-    }
-
-    public Herbivore(int speed, int hp, int id) {
+    public Herbivore(int speed, int hp, int eatRange) {
         super(speed, Grass.class);
         this.hp = hp;
-        this.id = id;
+        this.eatRange = eatRange;
     }
 
     public int getHp() throws NullPointerException {
@@ -31,22 +28,20 @@ public class Herbivore extends Creature {
 
     @Override
     public Coordinates makeMove(Coordinates coordinates, GameMap gameMap) {
-        List<Coordinates> path = super.findPath(coordinates, gameMap);
+        List<Coordinates> path = new PathFinder(coordinates, gameMap, getGoal()).findPath();
         int pathSize = path.size();
-        if (shouldEat(pathSize) || isNoGoal(path, coordinates)) {
+        if(isNotReachable(path)){
+            return coordinates;
+        } else if (pathSize == eatRange) {
             return path.getFirst();
-        } else if (pathSize > speed) {
-            return path.get(speed - TURN_TO_INDEX);
+        } else if (pathSize > getSpeed()) {
+            return path.get(getSpeed() - TURN_TO_INDEX);
         } else {
-            return path.get(pathSize - TURN_TO_INDEX - RANGE_TO_GOAL);
+            return path.get(pathSize - TURN_TO_INDEX - STOP_BEFORE_GOAL);
         }
     }
 
-    private boolean shouldEat(int rangeToGrass) {
-        return rangeToGrass == RANGE_TO_GOAL;
-    }
-
     public boolean canEat(Coordinates coordinates, GameMap gameMap) {
-        return gameMap.isCoordinatesContain(coordinates, goal);
+        return gameMap.isCoordinatesContains(coordinates, getGoal());
     }
 }

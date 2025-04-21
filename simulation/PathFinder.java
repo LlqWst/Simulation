@@ -1,8 +1,8 @@
 package simulation;
 
 import simulation.entity.Entity;
-import simulation.gameMap.Coordinates;
-import simulation.gameMap.GameMap;
+import simulation.gamemap.Coordinates;
+import simulation.gamemap.GameMap;
 
 import java.util.*;
 
@@ -25,16 +25,20 @@ public class PathFinder {
     public List<Coordinates> findPath() {
         Coordinates currentCoordinates;
         if (!isGoalExists()) {
-            return Collections.singletonList(startCoordinates);
+            return Collections.emptyList();
         }
         do {
             currentCoordinates = coordinatesForVisit.poll();
-            if (currentCoordinates == null) {
-                return Collections.singletonList(startCoordinates); // если цель недосягаема
+            if (isThereNoPath(currentCoordinates)) {
+                return Collections.emptyList();
             }
             currentCoordinates = seekGoal(currentCoordinates);
         } while (!isGoal(currentCoordinates));
         return findWholePath(currentCoordinates);
+    }
+
+    private boolean isThereNoPath(Coordinates coordinates){
+        return coordinates == null;
     }
 
     private boolean isGoalExists() {
@@ -83,14 +87,10 @@ public class PathFinder {
     }
 
     private boolean isValidCell(Coordinates coordinates) {
-        return coordinates.row() >= 0 && coordinates.column() >= 0
-                && coordinates.row() <= gameMap.getMaxRow() - 1
-                && coordinates.column() <= gameMap.getMaxColumn() - 1
+        return gameMap.isValidCoordinate(coordinates)
                 && !coordinatesForVisit.contains(coordinates)
                 && !visitedCoordinates.containsKey(coordinates)
-                && (gameMap.isEmpty(coordinates)
-                || (isGoal(coordinates))
-        );
+                && (gameMap.isEmpty(coordinates) || (isGoal(coordinates)));
     }
 
     private List<Coordinates> findWholePath(Coordinates goalCoordinates) {
@@ -104,7 +104,7 @@ public class PathFinder {
     }
 
     private boolean isGoal(Coordinates coordinates) {
-        return gameMap.isCoordinatesContain(coordinates, goal);
+        return gameMap.isCoordinatesContains(coordinates, goal);
     }
 
 }

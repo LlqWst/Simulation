@@ -1,8 +1,7 @@
 package simulation.actions;
 
-import simulation.Parameters;
 import simulation.entity.Entity;
-import simulation.gameMap.GameMap;
+import simulation.gamemap.GameMap;
 
 public class AddNewEntities extends Actions {
 
@@ -10,22 +9,20 @@ public class AddNewEntities extends Actions {
     private final int THRESHOLD;
     private final SpawnEntity spawnEntity;
     private final Class<? extends Entity> clazz;
-    private final Parameters parameters;
+    private final int amount;
 
-
-    public AddNewEntities(GameMap gameMap, Parameters parameters, SpawnEntity spawnEntity, Class<? extends Entity> clazz) {
+    public AddNewEntities(GameMap gameMap, int THRESHOLD, int amount, SpawnEntity spawnEntity, Class<? extends Entity> clazz) {
         this.gameMap = gameMap;
-        this.THRESHOLD = Parameters.THRESHOLD_ENTITY;
+        this.THRESHOLD = THRESHOLD;
         this.spawnEntity = spawnEntity;
         this.clazz = clazz;
-        this.parameters = parameters;
+        this.amount = amount;
     }
 
     private void addNewEntity() {
         int count = gameMap.getCountEntity(clazz);
         if (count <= THRESHOLD) {
-            count = parameters.getRandomEntityNumber(clazz);
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < amount; i++) {
                 spawnEntity.execute();
             }
         }

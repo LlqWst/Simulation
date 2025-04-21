@@ -1,4 +1,4 @@
-package simulation.entity.staticObjects;
+package simulation.entity.static_objects;
 
 import simulation.entity.Entity;
 

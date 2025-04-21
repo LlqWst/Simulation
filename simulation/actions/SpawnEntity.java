@@ -1,8 +1,8 @@
 package simulation.actions;
 
 import simulation.entity.Entity;
-import simulation.gameMap.Coordinates;
-import simulation.gameMap.GameMap;
+import simulation.gamemap.Coordinates;
+import simulation.gamemap.GameMap;
 
 import java.util.function.Supplier;
 

@@ -1,6 +1,8 @@
 package simulation.menu;
 
 class ParseIntInput {
+    private ParseIntInput() {}
+
     public static Object parse(String line, int min, int max) {
         int input;
         try {

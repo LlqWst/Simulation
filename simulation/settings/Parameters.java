@@ -1,16 +1,16 @@
-package simulation;
+package simulation.settings;
 
 import simulation.entity.Entity;
 import simulation.entity.creature.Herbivore;
 import simulation.entity.creature.Predator;
-import simulation.entity.staticObjects.Grass;
-import simulation.entity.staticObjects.Rock;
-import simulation.entity.staticObjects.Tree;
+import simulation.entity.static_objects.Grass;
+import simulation.entity.static_objects.Rock;
+import simulation.entity.static_objects.Tree;
 
 import java.util.Random;
 
 public class Parameters {
-    Random random = new Random();
+    private static final Random random = new Random();
     private static final int MAX_HERBIVORE = 6;
     private static final int MIN_HERBIVORE = 4;
     private static final int MAX_PREDATOR = 3;
@@ -30,44 +30,47 @@ public class Parameters {
     private static final int MAX_DAMAGE = 4;
     private static final int MIN_DAMAGE = 2;
     public static final int THRESHOLD_ENTITY = 2;
+    public static final int EAT_RANGE = 1;
 
-    public int getRandomDamage() {
+    private Parameters() {}
+
+    public static int getRandomDamage() {
         return random.nextInt(MIN_DAMAGE, MAX_DAMAGE);
     }
 
-    public int getRandomHp() {
+    public static int getRandomHp() {
         return random.nextInt(MIN_HP, MAX_HP);
     }
 
-    public int getRandomSpeed() {
+    public static int getRandomSpeed() {
         return random.nextInt(MIN_SPEED, MAX_SPEED);
     }
 
-    public int getRandomRange() {
+    public static int getRandomRange() {
         return random.nextInt(MIN_RANGE, MAX_RANGE);
     }
 
-    public int getRandomHerbivoreNumber() {
+    private static int getRandomHerbivoreNumber() {
         return random.nextInt(MIN_HERBIVORE, MAX_HERBIVORE);
     }
 
-    public int getRandomPredatorNumber() {
+    private static int getRandomPredatorNumber() {
         return random.nextInt(MIN_PREDATOR, MAX_PREDATOR);
     }
 
-    public int getRandomGrassNumber() {
+    private static int getRandomGrassNumber() {
         return random.nextInt(MIN_GRASS, MAX_GRASS);
     }
 
-    public int getRandomTreeNumber() {
+    private static int getRandomTreeNumber() {
         return random.nextInt(MIN_TREE, MAX_TREE);
     }
 
-    public int getRandomRockNumber() {
+    private static int getRandomRockNumber() {
         return random.nextInt(MIN_ROCK, MAX_ROCK);
     }
 
-    public int getRandomEntityNumber(Class<? extends Entity> clazz) {
+    public static int getRandomEntityNumber(Class<? extends Entity> clazz) {
         if (clazz == Grass.class) return getRandomGrassNumber();
         else if (clazz == Herbivore.class) return getRandomHerbivoreNumber();
         else if (clazz == Rock.class) return getRandomRockNumber();
