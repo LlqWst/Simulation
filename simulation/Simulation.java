@@ -93,14 +93,14 @@ public class Simulation {
     private void actRender() {
         renderer.render();
         try {
-            Thread.sleep(0);
+            Thread.sleep(1200);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
     private void printTurns() {
-        System.out.printf("== Turn: %d ==\n", ++turnCounter);
+        System.out.printf("\n== Turn: %d ==", ++turnCounter);
     }
 
     private void doTurnActions() {

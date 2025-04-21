@@ -7,24 +7,19 @@ import simulation.handler.PrintMoves;
 
 public class CreatureActivity {
     private final GameMap gameMap;
-    private final PrintMoves printMoves;
 
     public CreatureActivity(GameMap gameMap) {
         this.gameMap = gameMap;
-        this.printMoves = new PrintMoves(gameMap);
     }
 
     public void doActivity(Creature creature, Coordinates startCoordinates){
         Coordinates nextMove = creature.makeMove(startCoordinates, gameMap);
         if (creature instanceof Herbivore herbivore && herbivore.canEat(nextMove, gameMap)) {
-            printMoves.print(herbivore, startCoordinates, nextMove);
             doEat(herbivore, startCoordinates, nextMove);
         } else if (creature instanceof Predator predator && predator.canDamage(nextMove, gameMap)) {
             doDamage(predator, nextMove);
-            printMoves.print(predator, startCoordinates, nextMove);
         } else {
             moving(creature, startCoordinates, nextMove);
-            printMoves.printAll(creature, startCoordinates, nextMove);
         }
     }
 
