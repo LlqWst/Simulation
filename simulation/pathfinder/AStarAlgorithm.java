@@ -20,7 +20,7 @@ public class AStarAlgorithm{
     private final List<Coordinates> allGoalsCoordinates;
     private Queue<Node> nodesForVisit;
     private Coordinates goalCoordinates;
-    private final List<Node> visited = new ArrayList<>();
+    private final List<Node> visitedNodes = new ArrayList<>();
 
     public AStarAlgorithm(Coordinates coordinates, GameMap gameMap, Class<? extends Entity> goal) {
         this.gameMap = gameMap;
@@ -65,7 +65,7 @@ public class AStarAlgorithm{
 
     private void resetCollections(){
         nodesForVisit.clear();
-        visited.clear();
+        visitedNodes.clear();
         nodesForVisit.add(new Node(startCoordinates, startCoordinates, 0, 0));
     }
 
@@ -77,7 +77,7 @@ public class AStarAlgorithm{
                 break;
             }
             currentCoordinates = currentNode.coordinates();
-            visited.add(currentNode);
+            visitedNodes.add(currentNode);
             currentCoordinates = seekGoal(currentCoordinates, currentNode);
         } while (!isGoal(currentCoordinates));
         return currentCoordinates;
@@ -101,7 +101,7 @@ public class AStarAlgorithm{
                 nodesForVisit.add(node);
             }
             if(isGoal(nearCell)){
-                visited.add(node);
+                visitedNodes.add(node);
                 return nearCell;
             }
         }
@@ -124,12 +124,12 @@ public class AStarAlgorithm{
                 continue;
             }
 
-            int size = ORTHOGONAL_LENGTH;
+            int length = ORTHOGONAL_LENGTH;
             if(isDiagonal(rowShift, columnShift)){
-                size = DIAGONAL_LENGTH;
+                length = DIAGONAL_LENGTH;
             }
 
-            nearCoordinates.put(coordinates, size);
+            nearCoordinates.put(coordinates, length);
             columnShift++;
         }
         return nearCoordinates;
@@ -150,7 +150,7 @@ public class AStarAlgorithm{
     }
 
     private boolean isVisited(Coordinates coordinates){
-        for(Node node : visited){
+        for(Node node : visitedNodes){
             if(node.coordinates().equals(coordinates)){
                 return true;
             }
@@ -167,10 +167,10 @@ public class AStarAlgorithm{
     }
 
     private boolean canChangeLength(Node node, int newLength){
-        return isNodeExist(node) && nodeLength(node) > newLength;
+        return isNodeExist(node) && getNodeLength(node) > newLength;
     }
 
-    private int nodeLength(Node node){
+    private int getNodeLength(Node node){
         for(Node entry : nodesForVisit){
             if(entry.equals(node)) {
                 return entry.pathLength();
@@ -184,17 +184,11 @@ public class AStarAlgorithm{
     }
 
     private boolean isGoal(Coordinates coordinates) {
-        if(coordinates == null){
-            throw new IllegalArgumentException();
-        }
         return coordinates.equals(goalCoordinates);
     }
 
     private int findLengthToGoal(Coordinates coordinates){
-        if(coordinates == null){
-            throw new IllegalArgumentException();
-        }
-        for(Node entry : visited){
+        for(Node entry : visitedNodes){
             if (entry.coordinates().equals(coordinates)){
                 return entry.pathLength();
             }
@@ -217,7 +211,7 @@ public class AStarAlgorithm{
     }
 
     private Coordinates findParent(Coordinates coordinates){
-        for(Node node : visited){
+        for(Node node : visitedNodes){
             if(node.coordinates().equals(coordinates)){
                 return node.parent();
             }
