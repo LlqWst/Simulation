@@ -1,4 +1,4 @@
-package simulation;
+package simulation.path_finder;
 
 import simulation.entity.Entity;
 import simulation.gamemap.Coordinates;
@@ -6,7 +6,7 @@ import simulation.gamemap.GameMap;
 
 import java.util.*;
 
-public class PathFinder {
+public class BfsAlgorithm{
     private final GameMap gameMap;
     private final Class<? extends Entity> goal;
     private final Coordinates startCoordinates;
@@ -14,7 +14,7 @@ public class PathFinder {
     private final Queue<Coordinates> coordinatesForVisit = new ArrayDeque<>();
     private final Map<Coordinates, Coordinates> visitedCoordinates = new HashMap<>();
 
-    public PathFinder(Coordinates coordinates, GameMap gameMap, Class<? extends Entity> goal) {
+    public BfsAlgorithm(Coordinates coordinates, GameMap gameMap, Class<? extends Entity> goal) {
         this.gameMap = gameMap;
         this.goal = goal;
         this.startCoordinates = coordinates;

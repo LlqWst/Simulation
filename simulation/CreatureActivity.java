@@ -3,7 +3,6 @@ package simulation;
 import simulation.entity.creature.*;
 import simulation.gamemap.Coordinates;
 import simulation.gamemap.GameMap;
-import simulation.handler.PrintMoves;
 
 public class CreatureActivity {
     private final GameMap gameMap;

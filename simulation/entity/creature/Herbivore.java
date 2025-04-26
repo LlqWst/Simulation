@@ -1,6 +1,6 @@
 package simulation.entity.creature;
 
-import simulation.PathFinder;
+import simulation.path_finder.AStarAlgorithm;
 import simulation.gamemap.Coordinates;
 import simulation.gamemap.GameMap;
 import simulation.entity.static_objects.Grass;
@@ -11,7 +11,6 @@ public class Herbivore extends Creature {
 
     private int hp;
     private final int eatRange;
-
     public Herbivore(int speed, int hp, int eatRange) {
         super(speed, Grass.class);
         this.hp = hp;
@@ -28,7 +27,7 @@ public class Herbivore extends Creature {
 
     @Override
     public Coordinates makeMove(Coordinates coordinates, GameMap gameMap) {
-        List<Coordinates> path = new PathFinder(coordinates, gameMap, getGoal()).findPath();
+        List<Coordinates> path = new AStarAlgorithm(coordinates, gameMap, getGoal()).findPath();
         int pathSize = path.size();
         if(isNotReachable(path)){
             return coordinates;
@@ -44,4 +43,5 @@ public class Herbivore extends Creature {
     public boolean canEat(Coordinates coordinates, GameMap gameMap) {
         return gameMap.isCoordinatesContains(coordinates, getGoal());
     }
+
 }

@@ -1,6 +1,6 @@
 package simulation.entity.creature;
 
-import simulation.PathFinder;
+import simulation.path_finder.AStarAlgorithm;
 import simulation.gamemap.Coordinates;
 import simulation.gamemap.GameMap;
 
@@ -23,7 +23,7 @@ public class Predator extends Creature {
 
     @Override
     public Coordinates makeMove(Coordinates coordinates, GameMap gameMap) {
-        List<Coordinates> path = new PathFinder(coordinates, gameMap, getGoal()).findPath();
+        List<Coordinates> path = new AStarAlgorithm(coordinates, gameMap, getGoal()).findPath();
         int pathSize = path.size();
         if (isNotReachable(path)) {
             return coordinates;
