@@ -1,6 +1,6 @@
 package simulation.entity.creature;
 
-import simulation.path_finder.AStarAlgorithm;
+import simulation.pathfinder.AStarAlgorithm;
 import simulation.gamemap.Coordinates;
 import simulation.gamemap.GameMap;
 import simulation.entity.static_objects.Grass;

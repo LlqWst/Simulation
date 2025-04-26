@@ -1,4 +1,4 @@
-package simulation.path_finder;
+package simulation.pathfinder;
 
 import simulation.gamemap.Coordinates;
 
