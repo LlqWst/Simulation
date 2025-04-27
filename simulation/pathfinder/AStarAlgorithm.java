@@ -90,8 +90,8 @@ public class AStarAlgorithm extends PathFinder{
         visitedCoordinates.put(parentCoordinates, parent.parent());
         Map<Coordinates, Integer> nearCells = findNearCells(parentCoordinates);
         for(Coordinates nearCell : nearCells.keySet()){
-            int length = nearCells.get(nearCell);
-            int pathLength = length + parent.pathLength();
+            int weight = nearCells.get(nearCell);
+            int pathLength = weight + parent.pathLength();
             int cellAmount = pathLength + heuristic(nearCell);
             Node node = new Node(nearCell, parentCoordinates, pathLength, cellAmount);
             if(!isNodeExist(node)){
