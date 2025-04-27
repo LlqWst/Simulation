@@ -14,94 +14,85 @@ public class AStarAlgorithm extends PathFinder{
     private final static int ORTHOGONAL_WEIGHT = 10;
     private final static int HEURISTIC_WEIGHT = 10;
 
-    private final List<Coordinates> allGoalsCoordinates;
-    private Queue<Node> nodesForVisit;
-    private Coordinates goalCoordinates;
-
-    public AStarAlgorithm(Coordinates coordinates, GameMap gameMap, Class<? extends Entity> goal) {
-        super(gameMap, goal, coordinates, new HashMap<>());
-        this.allGoalsCoordinates = gameMap.getEntitiesCoordinates(goal);
-    }
-
-    private int heuristic(Coordinates coordinates){
+    private int heuristic(Coordinates coordinates, Coordinates currentGoal){
         if(coordinates == null){
             throw new IllegalArgumentException();
         }
-        return HEURISTIC_WEIGHT * (abs(goalCoordinates.row() -  coordinates.row()) + abs(goalCoordinates.column() - coordinates.column()));
+        return HEURISTIC_WEIGHT * (abs(currentGoal.row() -  coordinates.row()) + abs(currentGoal.column() - coordinates.column()));
     }
 
     @Override
-    public List<Coordinates> findPath() {
-        if (isThereNoGoal()) {
+    public List<Coordinates> find(Coordinates start, Class<? extends Entity> goal, GameMap gameMap) {
+        Queue<Node> forVisit = new PriorityQueue<>(Comparator.comparingInt(Node::cellAmount));
+        Map<Coordinates, Coordinates> visited = new HashMap<>();
+        List<Coordinates> allGoals = gameMap.getEntitiesCoordinates(goal);
+        if (isThereNoGoal(goal, gameMap)) {
             return Collections.emptyList();
         }
-        nodesForVisit = new PriorityQueue<>(Comparator.comparingInt(Node::cellAmount));
         int minLengthToGoal = 0;
         List<Coordinates> wholePath = Collections.emptyList();
-        for(Coordinates coordinatesOfGoal : allGoalsCoordinates) {
-            resetCollections();
-            goalCoordinates = coordinatesOfGoal;
-            Node goalNode = searchForPathToGoal();
-            if(isNotReachable(goalNode)){
+        for(Coordinates currentGoal : allGoals) {
+            reset(forVisit, visited, start);
+            Node goalNode = searchForPath(forVisit, visited, currentGoal, gameMap);
+            if(isNotReachable(goalNode, currentGoal)){
                 continue;
             }
-            int lengthToCurrentGoal = goalNode.pathLength();
-            if (isShorterWay(lengthToCurrentGoal, minLengthToGoal)) {
-                minLengthToGoal = lengthToCurrentGoal;
-                wholePath = reconstructPath(goalNode.coordinates());
+            int lengthToGoal = goalNode.pathLength();
+            if (isShorterWay(lengthToGoal, minLengthToGoal)) {
+                minLengthToGoal = lengthToGoal;
+                wholePath = reconstructPath(goalNode.coordinates(), start, visited);
             }
         }
-
         return wholePath;
     }
 
-    private void resetCollections(){
-        nodesForVisit.clear();
-        visitedCoordinates.clear();
-        nodesForVisit.add(new Node(startCoordinates, startCoordinates, 0, 0));
+    private void reset(Queue<Node> forVisit, Map<Coordinates, Coordinates> visited, Coordinates start){
+        forVisit.clear();
+        visited.clear();
+        forVisit.add(new Node(start, start, 0, 0));
     }
 
-    private Node searchForPathToGoal(){
+    private Node searchForPath(Queue<Node> forVisit, Map<Coordinates, Coordinates> visited, Coordinates currentGoal, GameMap gameMap){
         Node currentNode;
         do {
-            currentNode = nodesForVisit.poll();
+            currentNode = forVisit.poll();
             if (isThereNoPath(currentNode)) {
                 break;
             }
-            currentNode = seekGoal(currentNode);
-        } while (!isGoal(currentNode.coordinates()));
+            currentNode = seekGoal(forVisit, visited, currentNode, currentGoal, gameMap);
+        } while (!isGoal(currentNode.coordinates(), currentGoal));
         return currentNode;
     }
 
-    private boolean isNotReachable(Node currentCell){
-        return currentCell == null || !isGoal(currentCell.coordinates());
+    private boolean isNotReachable(Node currentCell, Coordinates currentGoal){
+        return currentCell == null || !isGoal(currentCell.coordinates(), currentGoal);
     }
 
-    private Node seekGoal(Node parent) {
-        Coordinates parentCoordinates = parent.coordinates();
-        visitedCoordinates.put(parentCoordinates, parent.parent());
-        Map<Coordinates, Integer> nearCells = findNearCells(parentCoordinates);
-        for(Coordinates nearCell : nearCells.keySet()){
-            int weight = nearCells.get(nearCell);
-            int pathLength = weight + parent.pathLength();
-            int cellAmount = pathLength + heuristic(nearCell);
-            Node node = new Node(nearCell, parentCoordinates, pathLength, cellAmount);
-            if(!isNodeExist(node)){
-                nodesForVisit.add(node);
-            } else if (canChangeLength(node, pathLength)){
-                nodesForVisit.remove(node);
-                nodesForVisit.add(node);
+    private Node seekGoal(Queue<Node> forVisit, Map<Coordinates, Coordinates> visited, Node current, Coordinates currentGoal, GameMap gameMap) {
+        Coordinates parent = current.coordinates();
+        visited.put(parent, current.parent());
+        Map<Coordinates, Integer> neighbours = findNeighbours(visited, parent, currentGoal, gameMap);
+        for(Coordinates neighbour : neighbours.keySet()){
+            int weight = neighbours.get(neighbour);
+            int pathLength = weight + current.pathLength();
+            int cellAmount = pathLength + heuristic(neighbour, currentGoal);
+            Node node = new Node(neighbour, parent, pathLength, cellAmount);
+            if(!isNodeExist(node, forVisit)){
+                forVisit.add(node);
+            } else if (canChangeLength(node, pathLength, forVisit)){
+                forVisit.remove(node);
+                forVisit.add(node);
             }
-            if(isGoal(nearCell)){
-                visitedCoordinates.put(nearCell, parentCoordinates);
+            if(isGoal(neighbour, currentGoal)){
+                visited.put(neighbour, parent);
                 return node;
             }
         }
-        return parent;
+        return current;
     }
 
-    private Map<Coordinates, Integer> findNearCells(Coordinates currentCoordinates) {
-        Map<Coordinates, Integer> nearCoordinates = new HashMap<>();
+    private Map<Coordinates, Integer> findNeighbours(Map<Coordinates, Coordinates> visited, Coordinates currentCoordinates, Coordinates currentGoal, GameMap gameMap) {
+        Map<Coordinates, Integer> neighbours = new HashMap<>();
         int rowShift = -1, columnShift = -1;
         while (isNotLowerRightCell(rowShift, columnShift)) {
             if (isNewRow(columnShift)) {
@@ -111,7 +102,7 @@ public class AStarAlgorithm extends PathFinder{
             int nearRow = currentCoordinates.row() + rowShift;
             int nearColumn = currentCoordinates.column() + columnShift;
             Coordinates coordinates = new Coordinates(nearRow, nearColumn);
-            if (!isValidCell(coordinates)) {
+            if (!isValidCell(visited, coordinates, currentGoal, gameMap)) {
                 columnShift++;
                 continue;
             }
@@ -121,32 +112,32 @@ public class AStarAlgorithm extends PathFinder{
                 weight = DIAGONAL_WEIGHT;
             }
 
-            nearCoordinates.put(coordinates, weight);
+            neighbours.put(coordinates, weight);
             columnShift++;
         }
-        return nearCoordinates;
+        return neighbours;
     }
 
-    private boolean isValidCell(Coordinates coordinates) {
+    private boolean isValidCell(Map<Coordinates, Coordinates> visited, Coordinates coordinates, Coordinates currentGoal, GameMap gameMap) {
         return gameMap.isValidCoordinate(coordinates)
-                && !visitedCoordinates.containsKey(coordinates)
-                && (gameMap.isEmpty(coordinates) || isGoal(coordinates));
+                && !visited.containsKey(coordinates)
+                && (gameMap.isEmpty(coordinates) || isGoal(coordinates, currentGoal));
     }
 
     private boolean isDiagonal(int rowShift, int columnShift){
         return (columnShift == -1 || columnShift == 1) && (rowShift == -1 || rowShift == 1);
     }
 
-    private boolean isNodeExist(Node node){
-        return nodesForVisit.contains(node);
+    private boolean isNodeExist(Node node, Queue<Node> forVisit){
+        return forVisit.contains(node);
     }
 
-    private boolean canChangeLength(Node node, int newLength){
-        return isNodeExist(node) && getNodeLength(node) > newLength;
+    private boolean canChangeLength(Node node, int newLength, Queue<Node> forVisit){
+        return isNodeExist(node, forVisit) && getNodeLength(node, forVisit) > newLength;
     }
 
-    private int getNodeLength(Node node){
-        for(Node entry : nodesForVisit){
+    private int getNodeLength(Node node, Queue<Node> forVisit){
+        for(Node entry : forVisit){
             if(entry.equals(node)) {
                 return entry.pathLength();
             }
@@ -154,8 +145,8 @@ public class AStarAlgorithm extends PathFinder{
         throw new IllegalArgumentException();
     }
 
-    private boolean isGoal(Coordinates coordinates) {
-        return coordinates.equals(goalCoordinates);
+    private boolean isGoal(Coordinates coordinates, Coordinates currentGoal) {
+        return coordinates.equals(currentGoal);
     }
 
     private boolean isShorterWay(int lengthToCurrentGoal, int minLengthToGoal){

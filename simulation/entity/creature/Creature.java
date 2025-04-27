@@ -3,24 +3,23 @@ package simulation.entity.creature;
 import simulation.gamemap.Coordinates;
 import simulation.gamemap.GameMap;
 import simulation.entity.Entity;
+import simulation.pathfinder.PathFinder;
 
 import java.util.List;
 
 public abstract class Creature extends Entity {
 
-    private final int speed;
-    private final Class<? extends Entity> goal;
+    protected final int speed;
+    protected final Class<? extends Entity> goal;
+    protected final PathFinder pathFinder;
 
     protected static final int TURN_TO_INDEX = 1;
     protected static final int STOP_BEFORE_GOAL = 1;
 
-    public Creature(int speed, Class<? extends Entity> goal) {
+    public Creature(int speed, Class<? extends Entity> goal, PathFinder pathFinder) {
         this.speed = speed;
         this.goal = goal;
-    }
-
-    protected int getSpeed(){
-        return this.speed;
+        this.pathFinder = pathFinder;
     }
 
     public Class<? extends Entity> getGoal() throws NullPointerException {

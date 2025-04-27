@@ -6,73 +6,69 @@ import simulation.gamemap.GameMap;
 
 import java.util.*;
 
-public class BfsAlgorithm extends PathFinder{
-
-    private final Queue<Coordinates> coordinatesForVisit = new ArrayDeque<>();
-
-    public BfsAlgorithm(Coordinates start, GameMap gameMap, Class<? extends Entity> goal) {
-        super(gameMap, goal, start, new HashMap<>());
-    }
+public class BfsAlgorithm extends PathFinder {
 
     @Override
-    public List<Coordinates> findPath() {
-        coordinatesForVisit.add(startCoordinates);
-        visitedCoordinates.put(startCoordinates, startCoordinates);
-        Coordinates currentCoordinates;
-        if (isThereNoGoal()) {
+    public List<Coordinates> find(Coordinates start, Class<? extends Entity> goal, GameMap gameMap) {
+        if (isThereNoGoal(goal, gameMap)) {
             return Collections.emptyList();
         }
+        Queue<Coordinates> forVisit = new ArrayDeque<>();
+        Map<Coordinates, Coordinates> visited = new HashMap<>();
+        forVisit.add(start);
+        visited.put(start, start);
+        Coordinates current;
         do {
-            currentCoordinates = coordinatesForVisit.poll();
-            if (isThereNoPath(currentCoordinates)) {
+            current = forVisit.poll();
+            if (isThereNoPath(current)) {
                 return Collections.emptyList();
             }
-            currentCoordinates = seekGoal(currentCoordinates);
-        } while (!isGoal(currentCoordinates));
-        return reconstructPath(currentCoordinates);
+            current = seekGoal(current, forVisit, visited,  goal, gameMap);
+        } while (!isGoal(current, goal, gameMap));
+        return reconstructPath(current, start, visited);
     }
 
-    private Coordinates seekGoal(Coordinates coordinates) {
-        List<Coordinates> nearCells = findNearCells(coordinates);
-        coordinatesForVisit.addAll(nearCells);
-        for (Coordinates nearCell : nearCells) {
-            visitedCoordinates.put(nearCell, coordinates);
-            if (isGoal(nearCell)) {
-                return nearCell;
+    private Coordinates seekGoal(Coordinates coordinates, Queue<Coordinates> forVisit, Map<Coordinates, Coordinates> visited, Class<? extends Entity> goal, GameMap gameMap) {
+        List<Coordinates> neighbours = findNeighbours(coordinates, forVisit, visited,  goal, gameMap);
+        for (Coordinates neighbour : neighbours) {
+            visited.put(neighbour, coordinates);
+            if (isGoal(neighbour, goal, gameMap)) {
+                return neighbour;
             }
         }
+        forVisit.addAll(neighbours);
         return coordinates;
     }
 
-    private List<Coordinates> findNearCells(Coordinates currentCoordinates) {
-        List<Coordinates> nearCoordinates = new ArrayList<>();
+    private List<Coordinates> findNeighbours(Coordinates current, Queue<Coordinates> forVisit, Map<Coordinates, Coordinates> visited, Class<? extends Entity> goal, GameMap gameMap) {
+        List<Coordinates> neighbours = new ArrayList<>();
         int rowShift = -1, columnShift = -1;
         while (isNotLowerRightCell(rowShift, columnShift)) {
             if (isNewRow(columnShift)) {
                 columnShift = -1;
                 rowShift++;
             }
-            int nearRow = currentCoordinates.row() + rowShift;
-            int nearColumn = currentCoordinates.column() + columnShift;
+            int nearRow = current.row() + rowShift;
+            int nearColumn = current.column() + columnShift;
             Coordinates coordinates = new Coordinates(nearRow, nearColumn);
-            if (!isValidCell(coordinates)) {
+            if (!isValidCell(coordinates, forVisit, visited, goal, gameMap)) {
                 columnShift++;
                 continue;
             }
-            nearCoordinates.add(coordinates);
+            neighbours.add(coordinates);
             columnShift++;
         }
-        return nearCoordinates;
+        return neighbours;
     }
 
-    private boolean isValidCell(Coordinates coordinates) {
+    private boolean isValidCell(Coordinates coordinates, Queue<Coordinates> forVisit, Map<Coordinates, Coordinates> visited, Class<? extends Entity> goal, GameMap gameMap) {
         return gameMap.isValidCoordinate(coordinates)
-                && !coordinatesForVisit.contains(coordinates)
-                && !visitedCoordinates.containsKey(coordinates)
-                && (gameMap.isEmpty(coordinates) || (isGoal(coordinates)));
+                && !forVisit.contains(coordinates)
+                && !visited.containsKey(coordinates)
+                && (gameMap.isEmpty(coordinates) || isGoal(coordinates, goal, gameMap));
     }
 
-    private boolean isGoal(Coordinates coordinates) {
+    private boolean isGoal(Coordinates coordinates, Class<? extends Entity> goal, GameMap gameMap) {
         return gameMap.isCoordinatesContains(coordinates, goal);
     }
 

@@ -8,23 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-abstract class PathFinder {
+public abstract class PathFinder {
 
-    protected final GameMap gameMap;
-    protected final Class<? extends Entity> goal;
-    protected final Coordinates startCoordinates;
-    protected final Map<Coordinates, Coordinates> visitedCoordinates;
+    abstract public List<Coordinates> find(Coordinates start, Class<? extends Entity> goal, GameMap gameMap);
 
-    protected PathFinder(GameMap gameMap, Class<? extends Entity> goal, Coordinates startCoordinates, Map<Coordinates, Coordinates> visitedCoordinates) {
-        this.gameMap = gameMap;
-        this.goal = goal;
-        this.startCoordinates = startCoordinates;
-        this.visitedCoordinates = visitedCoordinates;
-    }
-
-    abstract public List<Coordinates> findPath();
-
-    protected boolean isThereNoGoal() {
+    protected boolean isThereNoGoal(Class<? extends Entity> goal, GameMap gameMap) {
         return !gameMap.isContains(goal);
     }
 
@@ -40,13 +28,13 @@ abstract class PathFinder {
         return columnShift > 1;
     }
 
-    protected List<Coordinates> reconstructPath(Coordinates goalCoordinates) {
+    protected List<Coordinates> reconstructPath(Coordinates goalCoordinates, Coordinates start, Map<Coordinates, Coordinates> visited) {
         Coordinates partOfPath = goalCoordinates;
         List<Coordinates> result = new ArrayList<>();
         do {
             result.add(partOfPath);
-            partOfPath = visitedCoordinates.get(partOfPath);
-        } while (!partOfPath.equals(startCoordinates));
+            partOfPath = visited.get(partOfPath);
+        } while (!partOfPath.equals(start));
         return result.reversed();
     }
 

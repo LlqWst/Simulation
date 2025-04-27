@@ -5,6 +5,7 @@ import simulation.entity.Entity;
 import simulation.entity.creature.*;
 import simulation.entity.static_objects.*;
 import simulation.gamemap.GameMap;
+import simulation.pathfinder.*;
 import simulation.settings.Parameters;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class Main {
         GameMap gameMap = new GameMap();
         CreatureActivity creatureAction = new CreatureActivity(gameMap);
         MakeMove makeMove = new MakeMove(gameMap, creatureAction);
-        Supplier<Entity> supplierHerbivore = () -> new Herbivore(Parameters.getRandomSpeed(), Parameters.getRandomHp(), Parameters.EAT_RANGE);
+        Supplier<Entity> supplierHerbivore = () -> new Herbivore(Parameters.getRandomSpeed(), Parameters.getRandomHp(), Parameters.EAT_RANGE, new AStarAlgorithm());
         List<Actions> initActions = getActions(gameMap, supplierHerbivore);
         List<Actions> turnActions = List.of(
                 makeMove,
@@ -27,7 +28,7 @@ public class Main {
     }
 
     private static List<Actions> getActions(GameMap gameMap, Supplier<Entity> supplierHerbivore) {
-        Supplier<Entity> supplierPredator = () -> new Predator(Parameters.getRandomSpeed(), Parameters.getRandomDamage(), Parameters.getRandomRange());
+        Supplier<Entity> supplierPredator = () -> new Predator(Parameters.getRandomSpeed(), Parameters.getRandomDamage(), Parameters.getRandomRange(), new AStarAlgorithm());
         return List.of(
                 new AddNewEntities(gameMap, Parameters.THRESHOLD_ENTITY, Parameters.getRandomEntityNumber(Herbivore.class), new SpawnEntity(gameMap, supplierHerbivore), Herbivore.class),
                 new AddNewEntities(gameMap, Parameters.THRESHOLD_ENTITY, Parameters.getRandomEntityNumber(Predator.class), new SpawnEntity(gameMap, supplierPredator), Predator.class),
