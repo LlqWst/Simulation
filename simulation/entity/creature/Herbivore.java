@@ -4,6 +4,7 @@ import simulation.pathfinder.AStarAlgorithm;
 import simulation.gamemap.Coordinates;
 import simulation.gamemap.GameMap;
 import simulation.entity.static_objects.Grass;
+import simulation.pathfinder.BfsAlgorithm;
 
 import java.util.List;
 

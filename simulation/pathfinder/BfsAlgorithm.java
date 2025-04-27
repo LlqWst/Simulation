@@ -6,23 +6,18 @@ import simulation.gamemap.GameMap;
 
 import java.util.*;
 
-public class BfsAlgorithm{
-    private final GameMap gameMap;
-    private final Class<? extends Entity> goal;
-    private final Coordinates startCoordinates;
+public class BfsAlgorithm extends PathFinder{
 
     private final Queue<Coordinates> coordinatesForVisit = new ArrayDeque<>();
-    private final Map<Coordinates, Coordinates> visitedCoordinates = new HashMap<>();
 
-    public BfsAlgorithm(Coordinates coordinates, GameMap gameMap, Class<? extends Entity> goal) {
-        this.gameMap = gameMap;
-        this.goal = goal;
-        this.startCoordinates = coordinates;
-        coordinatesForVisit.add(coordinates);
-        visitedCoordinates.put(coordinates, coordinates);
+    public BfsAlgorithm(Coordinates start, GameMap gameMap, Class<? extends Entity> goal) {
+        super(gameMap, goal, start, new HashMap<>());
     }
 
+    @Override
     public List<Coordinates> findPath() {
+        coordinatesForVisit.add(startCoordinates);
+        visitedCoordinates.put(startCoordinates, startCoordinates);
         Coordinates currentCoordinates;
         if (!isGoalExists()) {
             return Collections.emptyList();
@@ -91,16 +86,6 @@ public class BfsAlgorithm{
                 && !coordinatesForVisit.contains(coordinates)
                 && !visitedCoordinates.containsKey(coordinates)
                 && (gameMap.isEmpty(coordinates) || (isGoal(coordinates)));
-    }
-
-    private List<Coordinates> findWholePath(Coordinates goalCoordinates) {
-        Coordinates partOfPath = goalCoordinates;
-        List<Coordinates> result = new ArrayList<>();
-        do {
-            result.add(partOfPath);
-            partOfPath = visitedCoordinates.get(partOfPath);
-        } while (!partOfPath.equals(startCoordinates));
-        return result.reversed();
     }
 
     private boolean isGoal(Coordinates coordinates) {

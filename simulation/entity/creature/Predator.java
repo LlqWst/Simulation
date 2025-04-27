@@ -3,6 +3,7 @@ package simulation.entity.creature;
 import simulation.pathfinder.AStarAlgorithm;
 import simulation.gamemap.Coordinates;
 import simulation.gamemap.GameMap;
+import simulation.pathfinder.BfsAlgorithm;
 
 import java.util.List;
 

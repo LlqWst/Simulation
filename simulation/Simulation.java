@@ -93,7 +93,7 @@ public class Simulation {
     private void actRender() {
         renderer.render();
         try {
-            Thread.sleep(1200);
+            Thread.sleep(0);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
