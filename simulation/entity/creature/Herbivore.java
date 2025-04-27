@@ -1,10 +1,9 @@
 package simulation.entity.creature;
 
-import simulation.pathfinder.AStarAlgorithm;
+import simulation.pathfinder.*;
 import simulation.gamemap.Coordinates;
 import simulation.gamemap.GameMap;
 import simulation.entity.static_objects.Grass;
-import simulation.pathfinder.BfsAlgorithm;
 
 import java.util.List;
 
