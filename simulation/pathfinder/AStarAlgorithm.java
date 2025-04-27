@@ -124,12 +124,12 @@ public class AStarAlgorithm extends PathFinder{
                 continue;
             }
 
-            int length = ORTHOGONAL_WEIGHT;
+            int weight = ORTHOGONAL_WEIGHT;
             if(isDiagonal(rowShift, columnShift)){
-                length = DIAGONAL_WEIGHT;
+                weight = DIAGONAL_WEIGHT;
             }
 
-            nearCoordinates.put(coordinates, length);
+            nearCoordinates.put(coordinates, weight);
             columnShift++;
         }
         return nearCoordinates;
