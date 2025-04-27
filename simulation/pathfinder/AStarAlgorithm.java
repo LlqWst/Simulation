@@ -23,12 +23,12 @@ public class AStarAlgorithm extends PathFinder{
 
     @Override
     public List<Coordinates> find(Coordinates start, Class<? extends Entity> goal, GameMap gameMap) {
-        Queue<Node> forVisit = new PriorityQueue<>(Comparator.comparingInt(Node::cellAmount));
-        Map<Coordinates, Coordinates> visited = new HashMap<>();
-        List<Coordinates> allGoals = gameMap.getEntitiesCoordinates(goal);
         if (isThereNoGoal(goal, gameMap)) {
             return Collections.emptyList();
         }
+        Queue<Node> forVisit = new PriorityQueue<>(Comparator.comparingInt(Node::cellAmount));
+        Map<Coordinates, Coordinates> visited = new HashMap<>();
+        List<Coordinates> allGoals = gameMap.getEntitiesCoordinates(goal);
         int minLengthToGoal = 0;
         List<Coordinates> wholePath = Collections.emptyList();
         for(Coordinates currentGoal : allGoals) {
@@ -69,14 +69,14 @@ public class AStarAlgorithm extends PathFinder{
     }
 
     private Node seekGoal(Queue<Node> forVisit, Map<Coordinates, Coordinates> visited, Node current, Coordinates currentGoal, GameMap gameMap) {
-        Coordinates parent = current.coordinates();
-        visited.put(parent, current.parent());
-        Map<Coordinates, Integer> neighbours = findNeighbours(visited, parent, currentGoal, gameMap);
+        Coordinates currentCoordinates = current.coordinates();
+        visited.put(currentCoordinates, current.parent());
+        Map<Coordinates, Integer> neighbours = findNeighbours(visited, currentCoordinates, currentGoal, gameMap);
         for(Coordinates neighbour : neighbours.keySet()){
             int weight = neighbours.get(neighbour);
             int pathLength = weight + current.pathLength();
             int cellAmount = pathLength + heuristic(neighbour, currentGoal);
-            Node node = new Node(neighbour, parent, pathLength, cellAmount);
+            Node node = new Node(neighbour, currentCoordinates, pathLength, cellAmount);
             if(!isNodeExist(node, forVisit)){
                 forVisit.add(node);
             } else if (canChangeLength(node, pathLength, forVisit)){
@@ -84,14 +84,14 @@ public class AStarAlgorithm extends PathFinder{
                 forVisit.add(node);
             }
             if(isGoal(neighbour, currentGoal)){
-                visited.put(neighbour, parent);
+                visited.put(neighbour, currentCoordinates);
                 return node;
             }
         }
         return current;
     }
 
-    private Map<Coordinates, Integer> findNeighbours(Map<Coordinates, Coordinates> visited, Coordinates currentCoordinates, Coordinates currentGoal, GameMap gameMap) {
+    private Map<Coordinates, Integer> findNeighbours(Map<Coordinates, Coordinates> visited, Coordinates current, Coordinates currentGoal, GameMap gameMap) {
         Map<Coordinates, Integer> neighbours = new HashMap<>();
         int rowShift = -1, columnShift = -1;
         while (isNotLowerRightCell(rowShift, columnShift)) {
@@ -99,8 +99,8 @@ public class AStarAlgorithm extends PathFinder{
                 columnShift = -1;
                 rowShift++;
             }
-            int nearRow = currentCoordinates.row() + rowShift;
-            int nearColumn = currentCoordinates.column() + columnShift;
+            int nearRow = current.row() + rowShift;
+            int nearColumn = current.column() + columnShift;
             Coordinates coordinates = new Coordinates(nearRow, nearColumn);
             if (!isValidCell(visited, coordinates, currentGoal, gameMap)) {
                 columnShift++;
