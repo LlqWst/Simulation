@@ -24,7 +24,23 @@ abstract class PathFinder {
 
     abstract public List<Coordinates> findPath();
 
-    protected List<Coordinates> findWholePath(Coordinates goalCoordinates) {
+    protected boolean isThereNoGoal() {
+        return !gameMap.isContains(goal);
+    }
+
+    protected boolean isNotLowerRightCell(int rowShift, int columnShift) {
+        return rowShift != 1 || columnShift <= 1;
+    }
+
+    protected boolean isThereNoPath(Object object){
+        return object == null;
+    }
+
+    protected boolean isNewRow(int columnShift) {
+        return columnShift > 1;
+    }
+
+    protected List<Coordinates> reconstructPath(Coordinates goalCoordinates) {
         Coordinates partOfPath = goalCoordinates;
         List<Coordinates> result = new ArrayList<>();
         do {

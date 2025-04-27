@@ -32,7 +32,7 @@ public class AStarAlgorithm extends PathFinder{
 
     @Override
     public List<Coordinates> findPath() {
-        if (!isGoalExists()) {
+        if (isThereNoGoal()) {
             return Collections.emptyList();
         }
         nodesForVisit = new PriorityQueue<>(Comparator.comparingInt(Node::cellAmount));
@@ -41,22 +41,18 @@ public class AStarAlgorithm extends PathFinder{
         for(Coordinates coordinatesOfGoal : allGoalsCoordinates) {
             resetCollections();
             goalCoordinates = coordinatesOfGoal;
-            Node currentNode = searchForShorterPath();
-            if(isNotReachable(currentNode)){
+            Node goalNode = searchForPathToGoal();
+            if(isNotReachable(goalNode)){
                 continue;
             }
-            int lengthToCurrentGoal = currentNode.pathLength();
+            int lengthToCurrentGoal = goalNode.pathLength();
             if (isShorterWay(lengthToCurrentGoal, minLengthToGoal)) {
                 minLengthToGoal = lengthToCurrentGoal;
-                wholePath = findWholePath(currentNode.coordinates());
+                wholePath = reconstructPath(goalNode.coordinates());
             }
         }
 
         return wholePath;
-    }
-
-    private boolean isGoalExists() {
-        return gameMap.isContains(goal);
     }
 
     private void resetCollections(){
@@ -65,11 +61,11 @@ public class AStarAlgorithm extends PathFinder{
         nodesForVisit.add(new Node(startCoordinates, startCoordinates, 0, 0));
     }
 
-    private Node searchForShorterPath(){
+    private Node searchForPathToGoal(){
         Node currentNode;
         do {
             currentNode = nodesForVisit.poll();
-            if (isThereNoWay(currentNode)) {
+            if (isThereNoPath(currentNode)) {
                 break;
             }
             currentNode = seekGoal(currentNode);
@@ -79,10 +75,6 @@ public class AStarAlgorithm extends PathFinder{
 
     private boolean isNotReachable(Node currentCell){
         return currentCell == null || !isGoal(currentCell.coordinates());
-    }
-
-    private boolean isThereNoWay(Node currentCell){
-        return currentCell == null;
     }
 
     private Node seekGoal(Node parent) {
@@ -111,7 +103,7 @@ public class AStarAlgorithm extends PathFinder{
     private Map<Coordinates, Integer> findNearCells(Coordinates currentCoordinates) {
         Map<Coordinates, Integer> nearCoordinates = new HashMap<>();
         int rowShift = -1, columnShift = -1;
-        while (!isBelowRightCell(rowShift, columnShift)) {
+        while (isNotLowerRightCell(rowShift, columnShift)) {
             if (isNewRow(columnShift)) {
                 columnShift = -1;
                 rowShift++;
@@ -135,22 +127,10 @@ public class AStarAlgorithm extends PathFinder{
         return nearCoordinates;
     }
 
-    private boolean isBelowRightCell(int rowShift, int columnShift) {
-        return rowShift == 1 && columnShift > 1;
-    }
-
-    private boolean isNewRow(int columnShift) {
-        return columnShift > 1;
-    }
-
     private boolean isValidCell(Coordinates coordinates) {
         return gameMap.isValidCoordinate(coordinates)
-                && !isVisited(coordinates)
+                && !visitedCoordinates.containsKey(coordinates)
                 && (gameMap.isEmpty(coordinates) || isGoal(coordinates));
-    }
-
-    private boolean isVisited(Coordinates coordinates){
-        return visitedCoordinates.containsKey(coordinates);
     }
 
     private boolean isDiagonal(int rowShift, int columnShift){

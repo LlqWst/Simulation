@@ -19,7 +19,7 @@ public class BfsAlgorithm extends PathFinder{
         coordinatesForVisit.add(startCoordinates);
         visitedCoordinates.put(startCoordinates, startCoordinates);
         Coordinates currentCoordinates;
-        if (!isGoalExists()) {
+        if (isThereNoGoal()) {
             return Collections.emptyList();
         }
         do {
@@ -29,15 +29,7 @@ public class BfsAlgorithm extends PathFinder{
             }
             currentCoordinates = seekGoal(currentCoordinates);
         } while (!isGoal(currentCoordinates));
-        return findWholePath(currentCoordinates);
-    }
-
-    private boolean isThereNoPath(Coordinates coordinates){
-        return coordinates == null;
-    }
-
-    private boolean isGoalExists() {
-        return gameMap.isContains(goal);
+        return reconstructPath(currentCoordinates);
     }
 
     private Coordinates seekGoal(Coordinates coordinates) {
@@ -55,7 +47,7 @@ public class BfsAlgorithm extends PathFinder{
     private List<Coordinates> findNearCells(Coordinates currentCoordinates) {
         List<Coordinates> nearCoordinates = new ArrayList<>();
         int rowShift = -1, columnShift = -1;
-        while (!isBelowRightCell(rowShift, columnShift)) {
+        while (isNotLowerRightCell(rowShift, columnShift)) {
             if (isNewRow(columnShift)) {
                 columnShift = -1;
                 rowShift++;
@@ -71,14 +63,6 @@ public class BfsAlgorithm extends PathFinder{
             columnShift++;
         }
         return nearCoordinates;
-    }
-
-    private boolean isBelowRightCell(int rowShift, int columnShift) {
-        return rowShift == 1 && columnShift > 1;
-    }
-
-    private boolean isNewRow(int columnShift) {
-        return columnShift > 1;
     }
 
     private boolean isValidCell(Coordinates coordinates) {
