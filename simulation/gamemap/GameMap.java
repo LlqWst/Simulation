@@ -12,13 +12,16 @@ public class GameMap {
     private final Map<Coordinates, Entity> entities = new HashMap<>();
 
     public GameMap() {
-        this.MAX_COLUMN = 12;
         this.MAX_ROW = 8;
+        this.MAX_COLUMN = 12;
     }
 
-    public GameMap(int maxColumn, int maxRow) {
-        this.MAX_COLUMN = maxColumn;
+    public GameMap(int maxRow, int maxColumn) {
+        if (maxRow < 1 || maxColumn < 1) {
+            throw new IllegalArgumentException("maxRow and maxColumn must be greater than 0");
+        }
         this.MAX_ROW = maxRow;
+        this.MAX_COLUMN = maxColumn;
     }
 
     public int getMaxRow() {
