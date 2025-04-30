@@ -1,6 +1,6 @@
 package simulation.menu;
 
-import simulation.Simulation;
+import simulation.simulation.Simulation;
 
 import java.util.LinkedHashMap;
 import java.util.List;

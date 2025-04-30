@@ -1,6 +1,5 @@
 package simulation.entity.creature;
 
-import simulation.gamemap.GameMapUtils;
 import simulation.pathfinder.*;
 import simulation.gamemap.Coordinates;
 import simulation.gamemap.GameMap;
@@ -10,12 +9,10 @@ import java.util.List;
 public class Predator extends Creature {
 
     private final int damage;
-    private final int damageRange;
 
     public Predator(int speed, int damage, int range, PathFinder pathFinder) {
-        super(speed, Herbivore.class, pathFinder);
+        super(speed, range, Herbivore.class, pathFinder);
         this.damage = damage;
-        this.damageRange = range;
     }
 
     public int getDamage() throws NullPointerException {
@@ -23,22 +20,28 @@ public class Predator extends Creature {
     }
 
     @Override
-    public Coordinates makeMove(GameMap gameMap) {
+    public void makeMove(GameMap gameMap) {
         Coordinates start = gameMap.getCoordinates(this);
-        List<Coordinates> path = pathFinder.find(gameMap, start, goal);
+        List<Coordinates> path = this.pathFinder.find(gameMap, start, goal);
         int pathSize = path.size();
-        if (isNotReachable(path)) {
-            return start;
-        } else if (damageRange >= pathSize) {
-            return path.getLast();
-        } else if (pathSize > speed) {
-            return path.get(speed - TURN_TO_INDEX);
-        } else {
-            return path.get(pathSize - TURN_TO_INDEX - STOP_BEFORE_GOAL);
+        if (super.isReachable(path)) {
+            int possibleStep;
+            if (super.getGoal(pathSize, this.range)) {
+                doDamage(gameMap, path.getFirst());
+            } else {
+                possibleStep = Math.min(this.speed - TURN_TO_INDEX, pathSize - TURN_TO_INDEX - STOP_BEFORE_GOAL);
+                super.move(gameMap, start, path.get(possibleStep));
+            }
         }
     }
 
-    public boolean canDamage(Coordinates coordinates, GameMap gameMap) {
-        return GameMapUtils.isCoordinatesContains(gameMap, coordinates, goal);
+    private void doDamage(GameMap gameMap, Coordinates hrbCoordinates) {
+        Herbivore hrb = ((Herbivore) gameMap.getEntity(hrbCoordinates));
+        int hp = hrb.getHp() - getDamage();
+        hrb.setHp(hp);
+        if (super.isDead(hp)) {
+            gameMap.removeEntity(hrbCoordinates);
+        }
     }
+
 }

@@ -1,4 +1,4 @@
-package simulation;
+package simulation.simulation;
 
 import simulation.menu.Menu;
 import simulation.actions.Actions;
@@ -87,15 +87,15 @@ public class Simulation {
     }
 
     private void nextTurn() {
-        actRender();
         printTurns();
         doTurnActions();
+        actRender();
     }
 
     private void actRender() {
         renderer.render();
         try {
-            Thread.sleep(1200);
+            Thread.sleep(0);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

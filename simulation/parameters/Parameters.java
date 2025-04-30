@@ -1,4 +1,4 @@
-package simulation.settings;
+package simulation.parameters;
 
 public class Parameters {
     public static final int MAX_HERBIVORE = 6;

@@ -6,7 +6,8 @@ import simulation.entity.creature.*;
 import simulation.entity.static_objects.*;
 import simulation.gamemap.GameMap;
 import simulation.pathfinder.*;
-import simulation.settings.Parameters;
+import simulation.parameters.Parameters;
+import simulation.simulation.Simulation;
 
 import java.util.List;
 import java.util.Random;
@@ -15,8 +16,7 @@ import java.util.function.Supplier;
 public class Main {
     public static void main(String[] args) {
         GameMap gameMap = new GameMap();
-        CreatureActivity creatureAction = new CreatureActivity(gameMap);
-        MoveAction makeMove = new MoveAction(gameMap, creatureAction);
+        MoveAction makeMove = new MoveAction(gameMap);
         Random random = new Random();
         int speed = random.nextInt(Parameters.MIN_SPEED, Parameters.MAX_SPEED);
         int hp = random.nextInt(Parameters.MIN_HP, Parameters.MAX_HP);
