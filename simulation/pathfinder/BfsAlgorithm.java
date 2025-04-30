@@ -1,6 +1,7 @@
 package simulation.pathfinder;
 
 import simulation.entity.Entity;
+import simulation.gamemap.GameMapUtils;
 import simulation.gamemap.Coordinates;
 import simulation.gamemap.GameMap;
 
@@ -9,7 +10,7 @@ import java.util.*;
 public class BfsAlgorithm extends PathFinder {
 
     @Override
-    public List<Coordinates> find(Coordinates start, Class<? extends Entity> goal, GameMap gameMap) {
+    public List<Coordinates> find(GameMap gameMap, Coordinates start, Class<? extends Entity> goal) {
         if (isThereNoGoal(goal, gameMap)) {
             return Collections.emptyList();
         }
@@ -69,7 +70,7 @@ public class BfsAlgorithm extends PathFinder {
     }
 
     private boolean isGoal(Coordinates coordinates, Class<? extends Entity> goal, GameMap gameMap) {
-        return gameMap.isCoordinatesContains(coordinates, goal);
+        return GameMapUtils.isCoordinatesContains(gameMap, coordinates, goal);
     }
 
 }

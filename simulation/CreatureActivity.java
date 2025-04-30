@@ -12,13 +12,13 @@ public class CreatureActivity {
     }
 
     public void doActivity(Creature creature, Coordinates startCoordinates){
-        Coordinates nextMove = creature.makeMove(startCoordinates, gameMap);
+        Coordinates nextMove = creature.makeMove(gameMap);
         if (creature instanceof Herbivore herbivore && herbivore.canEat(nextMove, gameMap)) {
             doEat(herbivore, startCoordinates, nextMove);
         } else if (creature instanceof Predator predator && predator.canDamage(nextMove, gameMap)) {
             doDamage(predator, nextMove);
-        } else {
-            moving(creature, startCoordinates, nextMove);
+        } else if (startCoordinates != nextMove){
+            move(creature, startCoordinates, nextMove);
         }
     }
 
@@ -36,7 +36,7 @@ public class CreatureActivity {
         }
     }
 
-    private void moving(Creature creature, Coordinates startCoordinates, Coordinates nextMove) {
+    private void move(Creature creature, Coordinates startCoordinates, Coordinates nextMove) {
         gameMap.removeEntity(startCoordinates);
         gameMap.setEntity(nextMove, creature);
     }

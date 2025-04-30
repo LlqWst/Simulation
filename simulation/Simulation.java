@@ -7,12 +7,13 @@ import simulation.gamemap.GameMapRenderer;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Simulation {
     private int turnCounter = 0;
-    private final AtomicBoolean isRunnable = new AtomicBoolean(true);
+    private final AtomicBoolean isRunnable;
     private final GameMapRenderer renderer;
-    private final Menu menu = new Menu(this);
+    private final Menu menu;
     private final List<Actions> turnActions;
     private final List<Actions> initActions;
 
@@ -20,6 +21,8 @@ public class Simulation {
         this.renderer = new GameMapRenderer(gameMap);
         this.turnActions = turnActions;
         this.initActions = initActions;
+        this.menu = new Menu(this);
+        this.isRunnable = new AtomicBoolean(true);
     }
 
     public void execute() {
@@ -100,7 +103,7 @@ public class Simulation {
     }
 
     private void printTurns() {
-        System.out.printf("\n== Turn: %d ==\n", ++turnCounter);
+        System.out.printf("      == Turn: %d ==\n", ++turnCounter);
     }
 
     private void doTurnActions() {

@@ -4,14 +4,15 @@ import simulation.entity.Entity;
 import simulation.entity.creature.Creature;
 import simulation.entity.creature.Herbivore;
 import simulation.entity.creature.Predator;
+import simulation.gamemap.GameMapUtils;
 import simulation.gamemap.Coordinates;
 import simulation.gamemap.GameMap;
 
-public class PrintMoves {
+public class MovePrinter {
 
     private final GameMap gameMap;
 
-    public PrintMoves(GameMap gameMap) {
+    public MovePrinter(GameMap gameMap) {
         this.gameMap = gameMap;
     }
 
@@ -24,7 +25,7 @@ public class PrintMoves {
         }
     }
 
-    public void print(Herbivore herbivore, Coordinates startCoordinates, Coordinates newCoordinates) {
+    private void print(Herbivore herbivore, Coordinates startCoordinates, Coordinates newCoordinates) {
         int hp = herbivore.getHp();
         StringBuilder line = new StringBuilder(String.format("hrb (R:%d, C:%d)", startCoordinates.row() + 1, startCoordinates.column() + 1));
 
@@ -36,10 +37,10 @@ public class PrintMoves {
     }
 
     private boolean hasGetGoal(Coordinates coordinates, Class<? extends Entity> clazz) {
-        return gameMap.isCoordinatesContains(coordinates, clazz);
+        return GameMapUtils.isCoordinatesContains(gameMap, coordinates, clazz);
     }
 
-    public void print(Predator predator, Coordinates startCoordinates, Coordinates newCoordinates) {
+    private void print(Predator predator, Coordinates startCoordinates, Coordinates newCoordinates) {
         StringBuilder line = new StringBuilder((String.format("prd (R:%d, C:%d), dmg:%d", startCoordinates.row() + 1, startCoordinates.column() + 1, predator.getDamage())));
         if (isDead(newCoordinates)) {
             line.append(" Damaging, hrb is dead on");

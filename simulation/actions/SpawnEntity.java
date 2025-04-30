@@ -1,6 +1,7 @@
 package simulation.actions;
 
 import simulation.entity.Entity;
+import simulation.gamemap.GameMapUtils;
 import simulation.gamemap.Coordinates;
 import simulation.gamemap.GameMap;
 
@@ -17,7 +18,7 @@ public class SpawnEntity extends Actions {
 
     private void setCreature() {
         Entity entity = supplier.get();
-        Coordinates coordinates = gameMap.getRandomEmptyCoordinates();
+        Coordinates coordinates = GameMapUtils.getRandomEmptyCoordinates(gameMap);
         gameMap.setEntity(coordinates, entity);
     }
 

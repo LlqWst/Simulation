@@ -1,5 +1,7 @@
 package simulation.gamemap;
 
+import simulation.entity.Entity;
+
 public class GameMapRenderer {
 
     private static final String ANSI_BLACK_BACKGROUND = "\u001B[0;100m";
@@ -18,24 +20,26 @@ public class GameMapRenderer {
     }
 
     public void render() {
-        System.out.println();
+        StringBuilder lines = new StringBuilder();
         for (int row = 0; row < gameMap.getMaxRow(); row++) {
-            StringBuilder line = new StringBuilder();
             for (int column = 0; column < gameMap.getMaxColumn(); column++) {
-                line.append(ANSI_BLACK_BACKGROUND);
-                line.append(entitySprite(new Coordinates(row, column)));
+                lines.append(ANSI_BLACK_BACKGROUND);
+                Coordinates coordinates = new Coordinates(row, column);
+                if(gameMap.isEmpty(coordinates)){
+                    lines.append(EMOJI_EARTH);
+                } else {
+                    Entity entity = gameMap.getEntity(coordinates);
+                    lines.append(entitySprite(entity));
+                }
             }
-            System.out.println(line + ANSI_COLOR_RESET);
+            lines.append(ANSI_COLOR_RESET + "\n");
         }
+        System.out.println(lines);
     }
 
-    public String entitySprite(Coordinates coordinates) {
+    public String entitySprite(Entity entity) {
 
-        if (gameMap.isEmpty(coordinates)) {
-            return EMOJI_EARTH;
-        }
-
-        return switch (gameMap.getEntity(coordinates).getClass().getSimpleName()) {
+        return switch (entity.getClass().getSimpleName()) {
             case "Herbivore" -> EMOJI_HERBIVORE;
             case "Predator" -> EMOJI_PREDATOR;
             case "Grass" -> EMOJI_GRASS;

@@ -1,6 +1,7 @@
 package simulation.actions;
 
 import simulation.entity.Entity;
+import simulation.gamemap.GameMapUtils;
 import simulation.gamemap.GameMap;
 
 public class AddNewEntities extends Actions {
@@ -20,7 +21,7 @@ public class AddNewEntities extends Actions {
     }
 
     private void addNewEntity() {
-        int count = gameMap.getCountEntity(clazz);
+        int count = GameMapUtils.getCountEntity(gameMap, clazz);
         if (count <= THRESHOLD) {
             for (int i = 0; i < amount; i++) {
                 spawnEntity.execute();

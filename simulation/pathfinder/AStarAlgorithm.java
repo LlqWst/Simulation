@@ -1,6 +1,7 @@
 package simulation.pathfinder;
 
 import simulation.entity.Entity;
+import simulation.gamemap.GameMapUtils;
 import simulation.gamemap.Coordinates;
 import simulation.gamemap.GameMap;
 
@@ -22,16 +23,17 @@ public class AStarAlgorithm extends PathFinder{
     }
 
     @Override
-    public List<Coordinates> find(Coordinates start, Class<? extends Entity> goal, GameMap gameMap) {
+    public List<Coordinates> find(GameMap gameMap, Coordinates start, Class<? extends Entity> goal) {
         if (isThereNoGoal(goal, gameMap)) {
             return Collections.emptyList();
         }
         Queue<Node> forVisit = new PriorityQueue<>(Comparator.comparingInt(Node::cellAmount));
         Map<Coordinates, Coordinates> visited = new HashMap<>();
-        List<Coordinates> allGoals = gameMap.getEntitiesCoordinates(goal);
+        List<Entity> allGoals = GameMapUtils.getEntities(gameMap, goal);
         int minLengthToGoal = 0;
         List<Coordinates> wholePath = Collections.emptyList();
-        for(Coordinates currentGoal : allGoals) {
+        for(Entity entityGoal : allGoals){
+            Coordinates currentGoal = gameMap.getCoordinates(entityGoal);
             reset(forVisit, visited, start);
             Node goalNode = searchForPath(forVisit, visited, currentGoal, gameMap);
             if(isNotReachable(goalNode, currentGoal)){

@@ -9,12 +9,12 @@ import java.util.List;
 
 public abstract class Creature extends Entity {
 
+    protected static final int TURN_TO_INDEX = 1;
+    protected static final int STOP_BEFORE_GOAL = 1;
+
     protected final int speed;
     protected final Class<? extends Entity> goal;
     protected final PathFinder pathFinder;
-
-    protected static final int TURN_TO_INDEX = 1;
-    protected static final int STOP_BEFORE_GOAL = 1;
 
     public Creature(int speed, Class<? extends Entity> goal, PathFinder pathFinder) {
         this.speed = speed;
@@ -30,5 +30,5 @@ public abstract class Creature extends Entity {
         return path.isEmpty();
     }
 
-    abstract public Coordinates makeMove(Coordinates coordinates, GameMap gameMap);
+    abstract public Coordinates makeMove(GameMap gameMap);
 }

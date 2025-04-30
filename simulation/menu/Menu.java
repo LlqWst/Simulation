@@ -3,21 +3,20 @@ package simulation.menu;
 import simulation.Simulation;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Menu {
 
-    public final static int START = 1;
-    public final static int CONTINUE = 2;
-    public final static int PAUSE = 3;
-    public final static int EXIT = 4;
+    public final static String START = "1";
+    public final static String CONTINUE = "2";
+    public final static String PAUSE = "3";
+    public final static String EXIT = "4";
 
     private final AtomicBoolean isRunnable = new AtomicBoolean(true);
     private final AtomicBoolean isStart = new AtomicBoolean(false);
 
-    Scanner scanner = new Scanner(System.in);
     private final Runnable simulationStart;
     private final Runnable simulationPause;
     private final Runnable simulationContinue;
@@ -31,7 +30,7 @@ public class Menu {
     }
 
     private String createMenu() {
-        Map<Integer, String> commands = new LinkedHashMap<>();
+        Map<String, String> commands = new LinkedHashMap<>();
         commands.put(START, "start Simulation");
         commands.put(CONTINUE, "continue Simulation");
         commands.put(PAUSE, "pause Simulation");
@@ -39,42 +38,26 @@ public class Menu {
         return MenuFactory.create(commands);
     }
 
-    public void start() {
+    private StringSelectDialog createDialog(){
         String menu = createMenu();
-        printMenu(menu);
-        awaitingInput();
+        List<String> keys = List.of(START, CONTINUE, PAUSE, EXIT);
+        String failMessage = "Неизвестная команда";
+        return new StringSelectDialog(menu, failMessage, keys);
     }
 
-    private void printMenu(String menu) {
-        System.out.println(menu);
-    }
-
-    private void awaitingInput() {
+    public void start() {
+        StringSelectDialog dialog = createDialog();
         while (true) {
-            checkInput();
+            checkInput(dialog);
         }
     }
 
-    private void checkInput() {
-        String line = scanner.nextLine();
-        Object answer = ParseIntInput.parse(line, START, EXIT);
-        if (isInputInt(answer)) {
-            int input = (int) answer;
-            commandSelection(input);
-        } else {
-            printErrorMessage();
-        }
+    private void checkInput(StringSelectDialog dialog) {
+        String command = dialog.input();
+        commandSelection(command);
     }
 
-    private boolean isInputInt(Object answer) {
-        return answer instanceof Integer;
-    }
-
-    private void printErrorMessage() {
-        System.out.println("Incorrect input");
-    }
-
-    private void commandSelection(int input) {
+    private void commandSelection(String input) {
         if (!isInitInput(input)) {
             printNotInitInput();
         } else if (shouldStarting(input)) {
@@ -92,8 +75,8 @@ public class Menu {
         System.out.printf("Enter %s for Start or %s for Exit\n", START, EXIT);
     }
 
-    private boolean isInitInput(int input) {
-        return isStart.get() || input == START || input == EXIT;
+    private boolean isInitInput(String input) {
+        return isStart.get() || input.equals(START) || input.equals(EXIT);
     }
 
     private void commandStart() {
@@ -119,20 +102,20 @@ public class Menu {
         simulationExit.run();
     }
 
-    private boolean shouldStarting(int input) {
-        return input == START && !isStart.get();
+    private boolean shouldStarting(String input) {
+        return input.equals(START) && !isStart.get();
     }
 
-    private boolean shouldContinue(int input) {
-        return input == CONTINUE && isStart.get() && !isRunnable.get();
+    private boolean shouldContinue(String input) {
+        return input.equals(CONTINUE) && isStart.get() && !isRunnable.get();
     }
 
-    private boolean shouldPause(int input) {
-        return input == PAUSE && isStart.get() && isRunnable.get();
+    private boolean shouldPause(String input) {
+        return input.equals(PAUSE) && isStart.get() && isRunnable.get();
     }
 
-    private boolean shouldExit(int input) {
-        return input == EXIT;
+    private boolean shouldExit(String input) {
+        return input.equals(EXIT);
     }
 
 }

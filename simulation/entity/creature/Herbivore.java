@@ -1,5 +1,6 @@
 package simulation.entity.creature;
 
+import simulation.gamemap.GameMapUtils;
 import simulation.pathfinder.*;
 import simulation.gamemap.Coordinates;
 import simulation.gamemap.GameMap;
@@ -26,11 +27,12 @@ public class Herbivore extends Creature {
     }
 
     @Override
-    public Coordinates makeMove(Coordinates coordinates, GameMap gameMap) {
-        List<Coordinates> path = pathFinder.find(coordinates, goal, gameMap);
+    public Coordinates makeMove(GameMap gameMap) {
+        Coordinates start = gameMap.getCoordinates(this);
+        List<Coordinates> path = pathFinder.find(gameMap, start, goal);
         int pathSize = path.size();
         if(isNotReachable(path)){
-            return coordinates;
+            return start;
         } else if (pathSize == eatRange) {
             return path.getFirst();
         } else if (pathSize > speed) {
@@ -41,7 +43,7 @@ public class Herbivore extends Creature {
     }
 
     public boolean canEat(Coordinates coordinates, GameMap gameMap) {
-        return gameMap.isCoordinatesContains(coordinates, goal);
+        return GameMapUtils.isCoordinatesContains(gameMap, coordinates, goal);
     }
 
 }

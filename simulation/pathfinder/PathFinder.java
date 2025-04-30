@@ -1,6 +1,7 @@
 package simulation.pathfinder;
 
 import simulation.entity.Entity;
+import simulation.gamemap.GameMapUtils;
 import simulation.gamemap.Coordinates;
 import simulation.gamemap.GameMap;
 
@@ -10,10 +11,10 @@ import java.util.Map;
 
 public abstract class PathFinder {
 
-    abstract public List<Coordinates> find(Coordinates start, Class<? extends Entity> goal, GameMap gameMap);
+    abstract public List<Coordinates> find(GameMap gameMap, Coordinates start, Class<? extends Entity> goal);
 
     protected boolean isThereNoGoal(Class<? extends Entity> goal, GameMap gameMap) {
-        return !gameMap.isContains(goal);
+        return !GameMapUtils.isContains(gameMap, goal);
     }
 
     protected boolean isNotLowerRightCell(int rowShift, int columnShift) {
