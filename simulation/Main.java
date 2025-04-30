@@ -15,8 +15,7 @@ import java.util.function.Supplier;
 
 public class Main {
     public static void main(String[] args) {
-        GameMap gameMap = new GameMap();
-        MoveAction makeMove = new MoveAction(gameMap);
+
         Random random = new Random();
         int speed = random.nextInt(Parameters.MIN_SPEED, Parameters.MAX_SPEED);
         int hp = random.nextInt(Parameters.MIN_HP, Parameters.MAX_HP);
@@ -28,6 +27,8 @@ public class Main {
         int treeAmount = random.nextInt(Parameters.MIN_TREE, Parameters.MAX_TREE);
         int rockAmount = random.nextInt(Parameters.MIN_ROCK, Parameters.MAX_ROCK);
 
+        GameMap gameMap = new GameMap();
+        MoveAction makeMove = new MoveAction(gameMap);
         Supplier<Entity> supplierHerbivore = () -> new Herbivore(speed, hp, Parameters.EAT_RANGE, new AStarAlgorithm());
         Supplier<Entity> supplierPredator = () -> new Predator(speed, damage, range, new AStarAlgorithm());
         List<Actions> initActions = List.of(
