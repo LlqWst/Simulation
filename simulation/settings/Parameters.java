@@ -1,9 +1,6 @@
 package simulation.settings;
 
-import java.util.Random;
-
 public class Parameters {
-    public static final Random random = new Random();
     public static final int MAX_HERBIVORE = 6;
     public static final int MIN_HERBIVORE = 4;
     public static final int MAX_PREDATOR = 3;

@@ -7,7 +7,6 @@ import simulation.gamemap.GameMapRenderer;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class Simulation {
     private int turnCounter = 0;
